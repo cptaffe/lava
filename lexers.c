@@ -15,9 +15,9 @@ lexeme *make_lexeme(int typ, char *buf) {
 
 void *lex_all(lexer *l) {
 	write(1, &l->buf, l->len);
-	printf("%c\n", *l->buf);
+	printf("%p\n", l->buf);
 	//if (l->buf == '(') {
-		lex_que_push(l->que, make_lexeme(1, "(")); //&l->buf[l->pos++]));
+		lex_que_push(l->que, make_lexeme(1, ")"));
 	//}
 	return lex_all;
 }
