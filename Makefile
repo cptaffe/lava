@@ -1,5 +1,5 @@
 CC= clang
-SRC= main.c lex.c
+SRC= main.c lex.c lexers.c
 OBJ= ${SRC:.c=.o} 
 BIN= lex
 

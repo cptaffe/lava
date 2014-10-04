@@ -16,8 +16,9 @@ typedef struct {
 
 // que of lexemes used by lexer
 typedef struct {
-	lexeme *que;
-	int len;
+	lexeme **que;
+	int top;
+	int bottom;
 } lexeme_que;
 
 // lexer struct
@@ -33,7 +34,11 @@ typedef struct {
 typedef void *(* lex_func) (lexer *);
 
 // init value for lexer.lexer
-void *lexAll(lexer *l);
+void *lex_all(lexer *l);
+
+// lexeme que
+lexeme *lex_que_pop(lexeme_que *que);
+void lex_que_push(lexeme_que *que, lexeme *lex);
 
 // takes lexer, returns lexeme
 lexeme *lex(lexer *l);
