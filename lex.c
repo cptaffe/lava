@@ -3,11 +3,14 @@
 
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdlib.h>
+#include <stdio.h> // debug
 #include "lex.h"
 
 const size_t LEXBUFF = 100;
 
-lexeme *lex_que_pop(lexeme_que *que) {
+// Get lexeme from que
+lexeme *lex_que_get(lexeme_que *que) {
 	if (que->bottom == que->top) {
 		return NULL;
 	} else {
@@ -15,23 +18,72 @@ lexeme *lex_que_pop(lexeme_que *que) {
 	}
 }
 
+// Push lexeme to que
 void lex_que_push(lexeme_que *que, lexeme *lex) {
 	if (que->top != 0 && que->top == que->bottom) {
 		que->top = que->bottom = 0;
 	}
+
 	que->que[que->top++] = lex;
 }
 
+// Advance lexer one character
+int lex_scan_next(lexer *l) {
+	if (l->len > l->front) {
+		l->front++;
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+// Backup lexer one character
+int lex_scan_backup(lexer *l) {
+	if (l->front > l->back) {
+		l->front--;
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+// Get current character
+char lex_scan_get(lexer *l) {
+	return l->buf[l->front - 1];
+}
+
+// Emit allocated string containing lexed characters
+char *lex_scan_emit(lexer *l) {
+	int size = l->front - l->back;
+	char *nbuf = malloc(sizeof(char) * size);
+	for (int i = 0; i < size; i++) {
+		nbuf[i] = l->buf[i + l->back];
+	}
+	nbuf[size] = '\0';
+	l->back = l->front;
+	return nbuf;
+}
+
+// ignore currently lexed characters
+void lex_scan_dump(lexer *l) {
+	l->back = l->front;
+}
+
 // List of lexers
-#include "lexers.h"
+//#include "lexers.h"
 
 // checks if lexeme is avaliable,
 // else runs state machine.
 lexeme *lex(lexer *l) {
-	do {
+	
+	while (l->lexer != NULL || l->que->top > l->que->bottom) {
 		if (l->que->top > l->que->bottom) {
-			return lex_que_pop(l->que);
+			return lex_que_get(l->que);
+		} else {
+			l->lexer = ((lex_func) l->lexer)(l);
 		}
-	} while (l->lexer != NULL && (l->lexer = ((lex_func) l->lexer)(l)));
+	}
+
+	printf("len: %d %d\n", l->que->top, l->que->bottom);
 	return NULL;
 }

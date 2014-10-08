@@ -1,17 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include "lex.h"
 
 int main() {
-	lexer l = {.lexer = lex_all, .pos = 0};
-	lexeme_que que = {0};
-	int buf[LEXBUFF];
-	l.buf = (char *) &buf;
-	l.que = &que;
-	lexeme *que2[10];
-	l.que->que = (lexeme **) &que2;
+	lexer l = {.lexer = lex_all, .front = 0, .back = 0};
+	l.buf = malloc(sizeof(char) * 100);
+	l.que = malloc(sizeof(lexeme_que));
+	l.que->top = 0;
+	l.que->bottom = 0;
+	l.que->que = malloc(sizeof(lexeme *) * 10);
 	l.fd = open("test.lsp", O_RDONLY);
-	l.len = read(l.fd, &l.buf, LEXBUFF);
-	printf("%s\n", ((lexeme *) lex(&l))->buf);
+	l.len = read(l.fd, l.buf, LEXBUFF);
+	lexeme *ret;
+
+	while ((ret = ((lexeme *) lex(&l))) != NULL) {
+		printf("got: '%s'\n", ret->buf);
+	}
+
 	return 0;
 }
