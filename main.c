@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "lex.h"
+#include "lexer/lex.h"
+#include "parser/parse.h"
 
 int main() {
 	lexer l = {.lexer = lex_all, .front = 0, .back = 0};
@@ -15,9 +16,16 @@ int main() {
 	l.len = read(l.fd, l.buf, LEXBUFF);
 	lexeme *ret;
 
-	while ((ret = ((lexeme *) lex(&l))) != NULL) {
-		printf("got: '%s'\n", ret->buf);
+	parser p = {.parser = parse_all};
+	obj_tree pr = {.tree = NULL, .child = NULL};
+	obj_tree pc = {.tree = NULL, .child = NULL};
+	p.root = &pr;
+	p.current = &pc;
+
+	while ((ret = lex(&l)) != NULL) {
+		parse(&p, ret);
 	}
+	printf("\n");
 
 	return 0;
 }

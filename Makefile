@@ -1,13 +1,16 @@
 CC = clang
 CFLAGS += -Wall -g
-SRC= main.c lex.c lexers.c err.c
+SRC= main.c lexer/lex.c lexer/lexers.c err/err.c parser/parse.c
 OBJ= ${SRC:.c=.o} 
-HDRS= lex.h lexers.h err.h
+HDRS = lexer/lex.h lexer/lexers.h lexer/lexeme.h
+HDRS += err/err.h parser/parse.h types.h
 BIN= lex
 
 all: $(BIN)
 
+# manual compile command, dirs apparently disable autocompiling.
 $(BIN): $(OBJ)
+	$(CC) $(CFLAGS) -o $(BIN) $(OBJ)
 
 $(OBJ): $(HDRS)
 

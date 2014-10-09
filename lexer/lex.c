@@ -69,9 +69,6 @@ void lex_scan_dump(lexer *l) {
 	l->back = l->front;
 }
 
-// List of lexers
-//#include "lexers.h"
-
 // checks if lexeme is avaliable,
 // else runs state machine.
 lexeme *lex(lexer *l) {
@@ -83,7 +80,5 @@ lexeme *lex(lexer *l) {
 			l->lexer = ((lex_func) l->lexer)(l);
 		}
 	}
-
-	printf("len: %d %d\n", l->que->top, l->que->bottom);
 	return NULL;
 }
