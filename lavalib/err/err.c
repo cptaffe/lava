@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-int err(char *str, ...) {
+int lava_err(char *str, ...) {
 	va_list vl;
 	va_start(vl, str);
 	fprintf(stderr, "err: ");

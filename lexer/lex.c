@@ -55,10 +55,12 @@ char lex_scan_get(lexer *l) {
 // Emit allocated string containing lexed characters
 char *lex_scan_emit(lexer *l) {
 	int size = l->front - l->back;
-	char *nbuf = malloc(sizeof(char) * size);
+	char *nbuf = malloc(sizeof(char) * (size + 1));
+
 	for (int i = 0; i < size; i++) {
 		nbuf[i] = l->buf[i + l->back];
 	}
+
 	nbuf[size] = '\0';
 	l->back = l->front;
 	return nbuf;
@@ -72,7 +74,6 @@ void lex_scan_dump(lexer *l) {
 // checks if lexeme is avaliable,
 // else runs state machine.
 lexeme *lex(lexer *l) {
-	
 	while (l->lexer != NULL || l->que->top > l->que->bottom) {
 		if (l->que->top > l->que->bottom) {
 			return lex_que_get(l->que);
@@ -80,5 +81,6 @@ lexeme *lex(lexer *l) {
 			l->lexer = ((lex_func) l->lexer)(l);
 		}
 	}
+
 	return NULL;
 }

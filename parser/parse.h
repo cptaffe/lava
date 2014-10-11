@@ -6,7 +6,7 @@
 #ifndef PARSE_H
 #define PARSE_H
 
-#include "../types.h"
+#include "../lavalib/lava.h"
 #include "../lexer/lexeme.h"
 
 typedef struct {

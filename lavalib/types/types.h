@@ -41,4 +41,6 @@ typedef struct {
 	obj *obj;
 } obj_var;
 
+char *type_str(int typ);
+
 #endif
