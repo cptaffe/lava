@@ -1,19 +1,23 @@
 CC = clang
-CFLAGS += -Wall -g -fPIC
+CFLAGS += -Wall -g -fpic
 
 # lava shared library compilation
 SRC = err/err.c types/types.c
 HDRS = err/err.h types/types.h
 OBJ = ${SRC:.c=.o}
-LIB = liblava.so
+LIB = liblava
 
-# create shared library liblava.so
-lava: $(LIB)
+# create shared library liblava.so # $(LIB).a
+lava: $(LIB).so 
 
-$(LIB): $(OBJ)
-	$(CC) -shared -o $(LIB) $(OBJ)
+$(LIB).so: $(OBJ)
+	$(CC) -shared -o $(LIB).so $(OBJ)
+
+$(LIB).a: $(OBJ)
+	ar rcs $(LIB).a $(OBJ) # static
+	ranlib $(LIB).a
 
 $(OBJ): $(HDRS)
 
 clean:
-	rm -rf $(LIB) $(OBJ)
+	rm -rf $(LIB).so $(LIB).a $(OBJ)

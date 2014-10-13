@@ -17,13 +17,17 @@ int main(int argv, char *argc[]) {
 	l.que->bottom = 0;
 	l.que->que = malloc(sizeof(lexeme *) * 10);
 	l.fd = open(argc[1], O_RDONLY);
-	if (l.fd < 0) {printf("cannot open '%s'\n", argc[1]); exit(1);}
+	if (l.fd < 0) {
+		printf("cannot open '%s'\n", argc[1]);
+		exit(1);
+	}
 	l.len = read(l.fd, l.buf, LEXBUFF);
 	parser p = {.parser = parse_all, .parenDepth = 0};
 	obj_tree pr = {.tree = NULL, .child = NULL};
 	p.root = &pr;
 	p.current = &pr;
 
+	// parses one statement
 	while (parse(&p, lex(&l)) == NULL) {}
 
 	printf("\n");
