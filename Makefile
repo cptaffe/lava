@@ -1,23 +1,34 @@
 CC = clang
-CFLAGS += -Wall -g
+CFLAGS += -Wall -g -I$(LIBLAVADIR)
 
 # lava compilation
 SRC= main.c lexer/lex.c lexer/lexers.c parser/parse.c parser/parsers.c lexer/lexeme.c
 HDRS = lexer/lex.h lexer/lexers.h lexer/lexeme.h parser/parse.h parser/parsers.h
-OBJ= ${SRC:.c=.o} 
+
+# liblava separate info (to allow library compilation, etc.)
+LIBLAVADIR = lavalib
+LIBLAVASRC = $(LIBLAVADIR)/err/err.c $(LIBLAVADIR)/types/types.c
+LIBLAVAHDRS = $(LIBLAVADIR)/lava.h $(LIBLAVADIR)/types/types.h $(LIBLAVADIR)/err/err.h
+
+SRC += $(LIBLAVASRC)
+HDRS += $(LIBLAVAHDRS)
+
+OBJ= ${SRC:.c=.o}
 BIN= lava
 
 MEMCHK = valgrind
 MEMCHKFLAGS = --leak-check=full
 
 DEBUG = lldb
-DEBUGFLAGS = 
+DEBUGFLAGS =
+
+EDITOR = atom
 
 all: lava $(BIN)
 
 # manual compile command, dirs apparently disable autocompiling.
 $(BIN): $(OBJ)
-	$(CC) $(CFLAGS) -L/home/cpt/lib/ -llava -o $(BIN) $(OBJ)
+	$(CC) $(CFLAGS) -o $(BIN) $(OBJ)
 
 $(OBJ): $(HDRS)
 
@@ -29,7 +40,7 @@ run:
 
 # opens all program and header files in sublime
 edit:
-	subl $(SRC) $(HDRS)
+	$(EDITOR) $(SRC) $(HDRS)
 
 # valgrind memory check on binary
 memcheck: $(BIN)

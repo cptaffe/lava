@@ -35,6 +35,8 @@ lexeme *lex_que_get(lexeme_que *que);
 void lex_que_push(lexeme_que *que, lexeme *lex);
 
 // Lexical scanning
+lexer *make_lexer(int fd);
+void free_lexer(lexer *l);
 int lex_scan_next(lexer *l);
 int lex_scan_backup(lexer *l);
 char lex_scan_get(lexer *l);

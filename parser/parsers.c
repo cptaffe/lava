@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "../lavalib/lava.h"
+#include "lava.h"
 #include "parse.h"
 #include "parsers.h"
 

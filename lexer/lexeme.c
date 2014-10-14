@@ -10,8 +10,7 @@ lexeme *make_lexeme(int typ, char *buf) {
 	return lex;
 }
 
-int lexeme_destroy(lexeme *l) {
+void free_lexeme(lexeme *l) {
 	free(l->buf);
 	free(l);
-	return 0;
 }
