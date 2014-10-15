@@ -3,7 +3,7 @@ CFLAGS += -Wall -g
 
 # module definitions
 # liblava separate info (to allow library compilation, etc.)
-LAVADIR = lavalib
+LAVADIR = liblava
 LAVASRC = $(LAVADIR)/err/err.c $(LAVADIR)/types/types.c
 LAVAHDRS = $(LAVADIR)/lava.h $(LAVADIR)/types/types.h $(LAVADIR)/err/err.h
 
