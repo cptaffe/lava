@@ -20,13 +20,17 @@ int main(int argv, char *argc[]) {
 	}
 	lexer *l = make_lexer(fd);
 	parser p = {.parser = parse_all, .parenDepth = 0};
-	obj_tree pr = {.tree = NULL, .child = NULL};
-	p.root = &pr;
-	p.current = &pr;
+	obj_tree *pr = make_obj_tree(NULL, NULL);
+	p.root = pr;
+	p.current = pr;
 
 	// parses one statement
-	while (parse(&p, lex(l)) == NULL) {}
+	lexeme *lexeme;
+	while ((lexeme = lex(l)) != NULL) {
+		parse(&p, lexeme);
+	}
 
 	printf("\n");
 	free_lexer(l);
+	free_obj_tree(p.root);
 }

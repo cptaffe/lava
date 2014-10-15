@@ -8,6 +8,7 @@
 
 void *parse_op(parser *p, lexeme *l) {
 	if (l->typ == TYPE_ID) {
+		printf("id '%s'\n", l->buf);
 		return parse_all;
 	} else {
 		lava_err("unexpected type '%s' for '%s'", type_str(l->typ), type_str(TYPE_ID));
@@ -17,11 +18,11 @@ void *parse_op(parser *p, lexeme *l) {
 
 void *parse_all(parser *p, lexeme *l) {
 	if (l->typ == TYPE_BP) {
-		printf("{");
+		printf("list\n");
 		p->parenDepth++;
 		return parse_op;
 	} else if (l->typ == TYPE_EP) {
-		printf("}");
+		printf("end of list\n");
 		p->parenDepth--;
 
 		if (p->parenDepth == 0) {

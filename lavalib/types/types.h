@@ -3,6 +3,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+const int OBJTREECHILDREN = 10;
+
 // types
 enum {
 	TYPE_BP = 0, // begenning paren
@@ -30,8 +32,9 @@ typedef struct {
 
 // Abstract Syntax Tree
 struct obj_tree {
-	struct obj *tree;
-	struct obj_tree **child; // array
+	struct obj *self;
+	struct obj_tree *parent;
+	struct obj_tree **children; // array
 };
 typedef struct obj_tree obj_tree;
 
@@ -42,5 +45,7 @@ typedef struct {
 } obj_var;
 
 char *type_str(int typ);
+obj *make_obj(int type);
+obj_tree *make_obj_tree(obj *o, obj_tree *parent);
 
 #endif
