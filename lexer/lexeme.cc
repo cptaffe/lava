@@ -11,7 +11,7 @@ namespace lava {
 	}
 
 	Lexeme::~Lexeme() {
-		delete buf;
+		//delete buf;
 	}
 
 }

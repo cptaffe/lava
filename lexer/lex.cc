@@ -12,17 +12,17 @@
 const size_t LEXBUF = 100;
 
 lava::Lexer::Lexer(int fd) {
-	top = bottom = 0;
-	lexer = lex_all;
+	front = back = 0;
+	lexer = (void *) lex_all;
 	buf = new std::string(LEXBUF, 0);
-	que = new std::queue<Lexeme, std::list<Lexeme> >;
-	fd = fd;
-	len = read(fd, buf, LEXBUF);
+	que = new std::queue<Lexeme *, std::list<Lexeme *> >;
+	this->fd = fd;
+	len = read(fd, (void *) buf->c_str(), LEXBUF);
 }
 
-void lava::Lexer::~Lexer() {
+lava::Lexer::~Lexer() {
 	delete que;
-	delete buf;
+	// delete buf;
 }
 
 // Advance lexer one character
@@ -47,13 +47,13 @@ int lava::Lexer::backup() {
 
 // Get current character
 char lava::Lexer::get() {
-	return buf[front - 1];
+	return buf->c_str()[front - 1];
 }
 
 // Emit allocated string containing lexed characters
-char *lava::Lexer::emit() {
-	int size = front - back;
-	std::string nbuf = std::string(&buf[back], size);
+std::string lava::Lexer::emit() {
+	size_t size = front - back;
+	std::string nbuf = std::string(buf[back], size);
 	back = front;
 	return nbuf;
 }
@@ -65,12 +65,12 @@ void lava::Lexer::dump() {
 
 // checks if lexeme is avaliable,
 // else runs state machine.
-Lexeme *lava::Lexer::lex() {
-	while (lexer != NULL || !que.empty()) {
-		if (!que.empty()) {
-			return que.pop();
+lava::Lexeme *lava::Lexer::lex() {
+	while (lexer != NULL || !que->empty()) {
+		if (!que->empty()) {
+			return que->front();
 		} else {
-			lexer = ((LexFunc) *this.*lexer)();
+			lexer = ((LexFunc) lexer)(this);
 		}
 	}
 

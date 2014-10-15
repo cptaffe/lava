@@ -1,3 +1,3 @@
 // Errors
 
-int lava_err(char *str, ...);
+namespace lava { int Err(char *str, ...); }

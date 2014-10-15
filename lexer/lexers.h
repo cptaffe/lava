@@ -7,8 +7,8 @@
 
 namespace lava {
 
-  LexFunc lex_all;
-  LexFunc lex_list;
+  void *lex_all(lava::Lexer *l);
+  void *lex_list(lava::Lexer *l);
 
 }
 

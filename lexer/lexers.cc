@@ -21,57 +21,57 @@ static int isspace(char c) {
 	return c == ' ' || c == '\t' || c == '\n';
 }
 
-void *lava::Lexer::lex_all() {
-	if (!this.next()) {return NULL;}
+void *lava::lex_all(lava::Lexer *l) {
+	if (!l->next()) {return NULL;}
 
-	if (this.get() == '(') {
-		this.que.push(new Lexeme(TYPE_BP, this.emit()));
-		return lex_list;
-	} else if (this.get() == ')') {
-		this.que.push(new Lexeme(TYPE_EP, this.emit()));
-		return lex_all;
-	} else if (isspace(this.get())) {
-		this.dump(l);
+	if (l->get() == '(') {
+		l->que->push(new lava::Lexeme(TYPE_BP, l->emit().c_str()));
+		return (void *) lex_list;
+	} else if (l->get() == ')') {
+		l->que->push(new lava::Lexeme(TYPE_EP, l->emit().c_str()));
+		return (void *) lex_all;
+	} else if (isspace(l->get())) {
+		l->dump();
 	} else {
-		Err("unknown symbol '%c' '%s'", this.get(), this.emit());
+		lava::Err((char *) "unknown symbol '%c' '%s'", l->get(), l->emit().c_str());
 	}
 
-	return lex_all;
+	return (void *) lex_all;
 }
 
-void *lava::Lexer::lex_list() {
-	if (!this.next()) {return NULL;}
+void *lava::lex_list(lava::Lexer *l) {
+	if (!l->next()) {return NULL;}
 
-	if (this.get() == ')') {
-		this.backup();
-		return lex_all;
-	} else if (isalph(this.get())) {
-		while (isalph(this.get())) {
-			if (!this.next()) {
-				Err("unexpected eof");
+	if (l->get() == ')') {
+		l->backup();
+		return (void *) lex_all;
+	} else if (isalph(l->get())) {
+		while (isalph(l->get())) {
+			if (!l->next()) {
+				lava::Err((char *) "unexpected eof");
 				return NULL;
 			}
 		}
 
-		this.backup();
-		this.que.push(new Lexeme(TYPE_ID, this.emit(l)));
-		return lex_list;
-	} else if (isnum(this.get())) {
-		while (isnum(this.get())) {
-			if (!this.next()) {
-				Err("unexpected eof");
+		l->backup();
+		l->que->push(new lava::Lexeme(TYPE_ID, l->emit()));
+		return (void *) lex_list;
+	} else if (isnum(l->get())) {
+		while (isnum(l->get())) {
+			if (!l->next()) {
+				lava::Err((char *) "unexpected eof");
 				return NULL;
 			}
 		}
 
-		this.backup();
-		this.que.push(new Lexeme(TYPE_N, this.emit(l)));
-		return lex_list;
-	} else if (isspace(this.get(l))) {
-		this.dump(l);
+		l->backup();
+		l->que->push(new lava::Lexeme(TYPE_N, l->emit()));
+		return (void *) lex_list;
+	} else if (isspace(l->get())) {
+		l->dump();
 	} else {
-		Err("unknown symbol '%c' '%s'", this.get(l), this.emit(l));
+		lava::Err((char *) "unknown symbol '%c' '%s'", l->get(), l->emit().c_str());
 	}
 
-	return lex_list;
+	return (void *) lex_list;
 }
