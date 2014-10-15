@@ -2,15 +2,20 @@
 #ifndef LEXEME_H
 #define LEXEME_H
 
+#include <string>
 #include "lava.h"
 
-// lexeme returned to the caller
-typedef struct {
-	char *buf;
-	int typ;
-} lexeme;
+namespace lava {
 
-lexeme *make_lexeme(int typ, char *buf);
-void free_lexeme(lexeme *l);
+	// lexeme returned to the caller
+	class Lexeme {
+		std::string buf;
+		int typ;
+	public:
+		Lexeme(int typ, std::string buf);
+		~Lexeme();
+	};
+
+}
 
 #endif

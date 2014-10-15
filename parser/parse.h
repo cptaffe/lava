@@ -9,16 +9,22 @@
 #include "lava.h"
 #include "lexeme.h"
 
-typedef struct {
-	int parenDepth; // up & down tree
-	obj_tree *root;
-	obj_tree *current;
-	void *parser;
-} parser;
+namespace lava {
 
-typedef void *(* parse_func)(parser *, lexeme *);
+	class Parser {
+		int parenDepth; // up & down tree
+		ObjTree *root;
+		ObjTree *current;
+		void *parser;
+	public:
+		Parser();
+		~Parser();
+		ObjTree *parse(Lexeme *);
+		void *parse_all(Lexeme *)
+	};
 
-obj_tree *parse(parser *p, lexeme *l);
-void *parse_all(parser *p, lexeme *l);
+	typedef void *(Parser::*ParseFunc)(Lexeme *);
+
+}
 
 #endif
