@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include "types.h"
 
+const int OBJTREECHILDREN = 10;
+
 char *type_str(int typ) {
 
 	switch (typ) {
@@ -38,9 +40,10 @@ obj_tree *make_obj_tree(obj *o, obj_tree *parent) {
 	t->self = (struct obj *) o;
 	t->parent = parent;
 	t->children = malloc(sizeof(obj_tree *) * OBJTREECHILDREN); // presized for 10 children
+	return t;
 }
 
-obj_tree *free_obj_tree(obj_tree *t) {
+void free_obj_tree(obj_tree *t) {
 	free(t->children);
 	free(t->self);
 	free(t);

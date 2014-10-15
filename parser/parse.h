@@ -6,8 +6,8 @@
 #ifndef PARSE_H
 #define PARSE_H
 
-#include "../lavalib/lava.h"
-#include "../lexer/lexeme.h"
+#include "lava.h"
+#include "lexeme.h"
 
 typedef struct {
 	int parenDepth; // up & down tree

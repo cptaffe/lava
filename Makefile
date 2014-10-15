@@ -1,20 +1,30 @@
 CC = clang
-CFLAGS += -Wall -g -I$(LIBLAVADIR)
+CFLAGS += -Wall -g
+
+# module definitions
+# liblava separate info (to allow library compilation, etc.)
+LAVADIR = lavalib
+LAVASRC = $(LAVADIR)/err/err.c $(LAVADIR)/types/types.c
+LAVAHDRS = $(LAVADIR)/lava.h $(LAVADIR)/types/types.h $(LAVADIR)/err/err.h
+
+LEXERDIR = lexer
+LEXERSRC = $(LEXERDIR)/lex.c $(LEXERDIR)/lexers.c $(LEXERDIR)/lexeme.c
+LEXERHDRS = $(LEXERSRC:.c=.h)
+
+PARSERDIR = parser
+PARSERSRC = $(PARSERDIR)/parse.c $(PARSERDIR)/parsers.c
+PARSERHDRS = $(PARSERSRC:.c=.h)
+
+# include each module directory for header searching
+DIRS = $(LAVADIR) $(LEXERDIR) $(PARSERDIR)
+CFLAGS += $(addprefix -I, $(DIRS))
 
 # lava compilation
-SRC= main.c lexer/lex.c lexer/lexers.c parser/parse.c parser/parsers.c lexer/lexeme.c
-HDRS = lexer/lex.h lexer/lexers.h lexer/lexeme.h parser/parse.h parser/parsers.h
+SRC = main.c $(LAVASRC) $(LEXERSRC) $(PARSERSRC)
+HDRS = $(LAVAHDRS) $(LEXERHDRS) $(PARSERHDRS)
 
-# liblava separate info (to allow library compilation, etc.)
-LIBLAVADIR = lavalib
-LIBLAVASRC = $(LIBLAVADIR)/err/err.c $(LIBLAVADIR)/types/types.c
-LIBLAVAHDRS = $(LIBLAVADIR)/lava.h $(LIBLAVADIR)/types/types.h $(LIBLAVADIR)/err/err.h
-
-SRC += $(LIBLAVASRC)
-HDRS += $(LIBLAVAHDRS)
-
-OBJ= ${SRC:.c=.o}
-BIN= lava
+OBJ = ${SRC:.c=.o}
+BIN = lava
 
 MEMCHK = valgrind
 MEMCHKFLAGS = --leak-check=full

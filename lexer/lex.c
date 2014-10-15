@@ -9,6 +9,24 @@
 
 const size_t LEXBUFF = 100;
 
+lexer *make_lexer(int fd) {
+	lexer *l = calloc(sizeof(lexer), 1);
+	l->lexer = lex_all;
+	l->buf = calloc(sizeof(char), 100);
+	l->que = malloc(sizeof(lexeme_que));
+	l->que->que = calloc(sizeof(lexeme *), 10);
+	l->fd = fd;
+	l->len = read(l->fd, l->buf, LEXBUFF);
+	return l;
+}
+
+void free_lexer(lexer *l) {
+	free(l->que->que);
+	free(l->que);
+	free(l->buf);
+	free(l);
+}
+
 // Get lexeme from que
 lexeme *lex_que_get(lexeme_que *que) {
 	if (que->bottom == que->top) {

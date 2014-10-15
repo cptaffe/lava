@@ -21,27 +21,6 @@ static int isspace(char c) {
 	return c == ' ' || c == '\t' || c == '\n';
 }
 
-lexer *make_lexer(int fd) {
-	lexer *l = malloc(sizeof(lexer));
-	memset(l, 0, sizeof(lexer));
-	l->lexer = lex_all;
-	l->buf = malloc(sizeof(char) * 100);
-	memset(l->buf, 0, sizeof(char) * 100);
-	l->que = malloc(sizeof(lexeme_que));
-	l->que->que = malloc(sizeof(lexeme *) * 10);
-	l->fd = fd;
-	l->len = read(l->fd, l->buf, LEXBUFF);
-	return l;
-}
-
-void free_lexer(lexer *l) {
-	free(l->que->que);
-	free(l->que);
-	free(l->buf);
-	free(l);
-}
-
-
 void *lex_all(lexer *l) {
 	if (!lex_scan_next(l)) {return NULL;}
 

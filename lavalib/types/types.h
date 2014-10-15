@@ -3,7 +3,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-const int OBJTREECHILDREN = 10;
+extern const int OBJTREECHILDREN;
 
 // types
 enum {
@@ -47,5 +47,6 @@ typedef struct {
 char *type_str(int typ);
 obj *make_obj(int type);
 obj_tree *make_obj_tree(obj *o, obj_tree *parent);
+void free_obj_tree(obj_tree *t);
 
 #endif
