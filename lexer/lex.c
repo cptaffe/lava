@@ -7,16 +7,16 @@
 #include <stdio.h> // debug
 #include "lex.h"
 
-const size_t LEXBUFF = 100;
+const size_t LEXBUF = 100;
 
 lexer *make_lexer(int fd) {
-	lexer *l = calloc(sizeof(lexer), 1);
+	lexer *l = calloc(sizeof(lexer), 1); // zero
 	l->lexer = lex_all;
-	l->buf = calloc(sizeof(char), 100);
-	l->que = malloc(sizeof(lexeme_que));
-	l->que->que = calloc(sizeof(lexeme *), 10);
+	l->buf = calloc(sizeof(char), LEXBUF);
+	l->que = calloc(sizeof(lexeme_que), 1); // zero
+	l->que->que = malloc(sizeof(lexeme *) * 10);
 	l->fd = fd;
-	l->len = read(l->fd, l->buf, LEXBUFF);
+	l->len = read(l->fd, l->buf, LEXBUF);
 	return l;
 }
 
