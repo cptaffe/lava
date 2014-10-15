@@ -35,8 +35,9 @@ public:
 };
 
 // function pointer type
-namespace lava { typedef void *(*LexFunc)(Lexer *l); }
-
-lava::LexFunc lex_all; // init value for Lexer.lexer
+namespace lava {
+	typedef void *(*LexFunc)(Lexer *l);
+	void *lex_all(Lexer *l);
+}
 
 #endif

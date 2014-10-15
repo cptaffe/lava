@@ -9,9 +9,9 @@ namespace lava {
 
 	// lexeme returned to the caller
 	class Lexeme {
+	public:
 		std::string buf;
 		int typ;
-	public:
 		Lexeme(int typ, std::string buf);
 		~Lexeme();
 	};

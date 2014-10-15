@@ -7,21 +7,25 @@ namespace lava {
 
 	Parser::Parser() {
 		parenDepth = 0;
-		ObjTree root = new ObjTree;
-		ObjTree current = root;
-		parser = parse_all;
+		root = new ObjTree(NULL, NULL);
+		current = root;
+		parser = (void *) parse_all;
+	}
+
+	Parser::~Parser() {
+		delete root;
 	}
 
 	// Takes lexeme and builds tree, saves state between calls.
 	// Returns NULL until a full tree has been built, then returns tree.
-	ObjTree *Parser::parse(lexeme *l) {
+	ObjTree *Parser::parse(Lexeme *l) {
 		if (l == NULL) {
 			delete l;
 			return root;
 		} // assume eof, bail.
 
 		if (parser != NULL) {
-			parser = ((ParseFunc) *this:*parser)(l);
+			parser = ((ParseFunc) parser)(this, l);
 
 			if (current == NULL) {
 				delete l;

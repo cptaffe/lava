@@ -24,7 +24,7 @@ DIRS = $(LAVADIR) $(LEXERDIR) $(PARSERDIR)
 CXXFLAGS += $(addprefix -I, $(DIRS))
 
 # lava compilation
-SRC = main.c $(LAVASRC) $(LEXERSRC) $(PARSERSRC)
+SRC = main.cc $(LAVASRC) $(LEXERSRC) $(PARSERSRC)
 HDRS = $(LAVAHDRS) $(LEXERHDRS) $(PARSERHDRS)
 
 OBJ = ${SRC:.cc=.o}

@@ -12,18 +12,19 @@
 namespace lava {
 
 	class Parser {
+	public:
 		int parenDepth; // up & down tree
 		ObjTree *root;
 		ObjTree *current;
 		void *parser;
-	public:
 		Parser();
 		~Parser();
 		ObjTree *parse(Lexeme *);
-		void *parse_all(Lexeme *)
 	};
 
-	typedef void *(Parser::*ParseFunc)(Lexeme *);
+	typedef void *(*ParseFunc)(Parser *, Lexeme *);
+
+	void *parse_all(Parser *p, Lexeme *l);
 
 }
 

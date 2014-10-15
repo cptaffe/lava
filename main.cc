@@ -19,17 +19,13 @@ int main(int argv, char *argc[]) {
 	}
 	lava::Lexer *l = new lava::Lexer(fd);
 	lava::Parser *p = new lava::Parser();
-	ObjTree *pr = new lava::ObjTree(NULL, NULL);
-	p.root = pr;
-	p.current = pr;
 
 	// parses one statement
 	lava::Lexeme *lexeme;
-	while ((lexeme = l.lex()) != NULL) {
-		p.parse(lexeme);
+	while ((lexeme = l->lex()) != NULL) {
+		p->parse(lexeme);
 	}
 
 	delete l;
-	delete p.root;
 	delete p;
 }

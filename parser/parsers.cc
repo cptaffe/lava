@@ -8,36 +8,36 @@
 
 namespace lava {
 
-	void *Parser::parse_op(Lexeme *l) {
+	void *parse_op(Parser *p, Lexeme *l) {
 		if (l->typ == TYPE_ID) {
-			printf("id '%s'\n", l->buf);
-			return parse_all;
+			printf("id '%s'\n", l->buf.c_str());
+			return (void *) parse_all;
 		} else {
-			Err("unexpected type '%s' for '%s'", TypeString(l->typ)), TypeString(TYPE_ID));
-			return parse_all;
+			Err((char *) "unexpected type '%s' for '%s'", TypeString(l->typ).c_str(), 	TypeString(TYPE_ID).c_str());
+			return (void *) parse_all;
 		}
 	}
 
-	void *Parser::parse_all(Lexeme *l) {
+	void *parse_all(Parser *p, Lexeme *l) {
 		if (l->typ == TYPE_BP) {
-			printf("list\n");
-			parenDepth++;
-			return parse_op;
+			printf((char *) "list\n");
+			p->parenDepth++;
+			return (void *) parse_op;
 		} else if (l->typ == TYPE_EP) {
-			printf("end of list\n");
-			parenDepth--;
+			printf((char *) "end of list\n");
+			p->parenDepth--;
 
-			if (parenDepth == 0) {
-				current = NULL;
-				return parse_all;
-			} else if (parenDepth < 0) {
-				Err("extraneos ')'");
-				current = NULL;
-				return parse_all;
+			if (p->parenDepth == 0) {
+				p->current = NULL;
+				return (void *) parse_all;
+			} else if (p->parenDepth < 0) {
+				Err((char *) "extraneos ')'");
+				p->current = NULL;
+				return (void *) parse_all;
 			}
 		}
 
-		return parse_all;
+		return (void *) parse_all;
 	}
 
 }

@@ -33,7 +33,6 @@ namespace lava {
 		};
 	public:
 		Obj(int);
-		~Obj();
 		std::string toString();
 	};
 
