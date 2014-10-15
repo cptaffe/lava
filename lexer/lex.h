@@ -3,7 +3,7 @@
 #ifndef LEX_H
 #define LEX_H
 
-namespace lava {
+namespace lava { class Lexer; }
 
 	extern const size_t LEXBUFF;
 
@@ -12,14 +12,14 @@ namespace lava {
 	#include "lexeme.h"
 
 	// lexer struct
-	class Lexer {
+	class lava::Lexer {
 		int fd;
 		char *buf;
 		int len;
 		int front;
 		int back;
 		void *lexer; // current lexer
-		std::queue<Lexeme, std::list<Lexeme *> > *que;
+		std::queue<Lexeme *> *que;
 	public:
 		Lexer(int); // takes file descriptor
 		~Lexer();
@@ -35,7 +35,5 @@ namespace lava {
 
 	// function pointer type
 	typedef void *(Lexer::*LexFunc)();
-
-}
 
 #endif

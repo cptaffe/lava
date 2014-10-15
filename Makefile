@@ -1,5 +1,5 @@
-CC = g++ # linking and stuff
-CXX = g++ # actual compiler
+CC = clang++ # linking and stuff
+CXX = clang++ # actual compiler
 CXXFLAGS += -Wall -g
 
 # module definitions

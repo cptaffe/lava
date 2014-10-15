@@ -9,75 +9,70 @@
 #include <vector>
 #include "lex.h"
 
+const size_t LEXBUF = 100;
 
-namespace lava {
+lava::Lexer::Lexer(int fd) {
+	top = bottom = 0;
+	lexer = lex_all;
+	buf = new std::string(LEXBUF, 0);
+	que = new std::queue<Lexeme, std::list<Lexeme> >;
+	fd = fd;
+	len = read(fd, buf, LEXBUF);
+}
 
-	const size_t LEXBUF = 100;
+void lava::Lexer::~Lexer() {
+	delete que;
+	delete buf;
+}
 
-	Lexer::Lexer(int fd) {
-		top = bottom = 0;
-		lexer = lex_all;
-		buf = new std::string(LEXBUF, 0);
-		que = new std::queue<Lexeme, std::list<Lexeme> >;
-		fd = fd;
-		len = read(fd, buf, LEXBUF);
+// Advance lexer one character
+int lava::Lexer::next() {
+	if (len > front) {
+		front++;
+		return 1;
+	} else {
+		return 0;
 	}
+}
 
-	void Lexer::~Lexer() {
-		delete que;
-		delete buf;
+// Backup lexer one character
+int lava::Lexer::backup() {
+	if (front > back) {
+		front--;
+		return 1;
+	} else {
+		return 0;
 	}
+}
 
-	// Advance lexer one character
-	int Lexer::next(lexer *l) {
-		if (len > front) {
-			front++;
-			return 1;
+// Get current character
+char lava::Lexer::get() {
+	return buf[front - 1];
+}
+
+// Emit allocated string containing lexed characters
+char *lava::Lexer::emit() {
+	int size = front - back;
+	std::string nbuf = std::string(&buf[back], size);
+	back = front;
+	return nbuf;
+}
+
+// ignore currently lexed characters
+void lava::Lexer::dump() {
+	back = front;
+}
+
+// checks if lexeme is avaliable,
+// else runs state machine.
+Lexeme *lava::Lexer::lex() {
+	while (lexer != NULL || !que.empty()) {
+		if (!que.empty()) {
+			return que.pop();
 		} else {
-			return 0;
+			lexer = ((LexFunc) *this.*lexer)();
 		}
 	}
 
-	// Backup lexer one character
-	int Lexer::backup(lexer *l) {
-		if (front > back) {
-			front--;
-			return 1;
-		} else {
-			return 0;
-		}
-	}
-
-	// Get current character
-	char Lexer::get(lexer *l) {
-		return buf[front - 1];
-	}
-
-	// Emit allocated string containing lexed characters
-	char *Lexer::emit(lexer *l) {
-		int size = front - back;
-		std::string nbuf = std::string(&buf[back], size);
-		back = front;
-		return nbuf;
-	}
-
-	// ignore currently lexed characters
-	void Lexer::dump() {
-		back = front;
-	}
-
-	// checks if lexeme is avaliable,
-	// else runs state machine.
-	Lexeme *Lexer::lex() {
-		while (lexer != NULL || !que.empty()) {
-			if (!que.empty()) {
-				return que.pop();
-			} else {
-				lexer = ((LexFunc)x *this.*lexer)();
-			}
-		}
-
-		return NULL;
-	}
-
+	return NULL;
 }
