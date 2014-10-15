@@ -3,50 +3,55 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-extern const int OBJTREECHILDREN;
+namespace lava {
 
-// types
-enum {
-	TYPE_BP = 0, // begenning paren
-	TYPE_EP, // ending paren
-	TYPE_ID,
-	TYPE_N, // number literal
-	TYPE_C, // character literal
-	TYPE_STR // string literal
-};
-
-// The Object type
-typedef struct {
-	int type;
-	union {
-		// number (64 bit)
-		long long int num;
-		// string
-		char *str;
-		// character
-		char ch;
-		// pointer
-		void *ptr; // ids should point to symbol table
+	// types
+	enum {
+		TYPE_BP = 0, // begenning paren
+		TYPE_EP, // ending paren
+		TYPE_ID,
+		TYPE_N, // number literal
+		TYPE_C, // character literal
+		TYPE_STR // string literal
 	};
-} obj;
 
-// Abstract Syntax Tree
-struct obj_tree {
-	struct obj *self;
-	struct obj_tree *parent;
-	struct obj_tree **children; // array
-};
-typedef struct obj_tree obj_tree;
+	// The Object type
+	class Obj {
+		int type;
+		union {
+			// number (64 bit)
+			long long int num;
+			// string
+			char *str;
+			// character
+			char ch;
+			// pointer
+			void *ptr; // ids should point to symbol table
+		};
+	public:
+		Obj(int);
+		~Obj();
+		std::string toString();
+	};
 
-// Object storage: name & ptr to Obj
-typedef struct {
-	char *name;
-	obj *obj;
-} obj_var;
+	// Abstract Syntax Tree
+	class ObjTree {
+		Obj *self;
+		ObjTree *parent;
+		std::vector<ObjTree *> *children; // array
+	public:
+		ObjTree(Obj *, ObjTree *);
+		~ObjTree();
+	};
 
-char *type_str(int typ);
-obj *make_obj(int type);
-obj_tree *make_obj_tree(obj *o, obj_tree *parent);
-void free_obj_tree(obj_tree *t);
+	// Object storage: name & ptr to Obj
+/*	class ObjVar {
+		char *name;
+		Obj *obj;
+	};*/
+
+	std::string TypeString(int typ);
+
+}
 
 #endif

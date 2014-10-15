@@ -19,7 +19,7 @@ namespace lava {
 		int front;
 		int back;
 		void *lexer; // current lexer
-		std::queue<Lexeme, std::list<Lexeme> > *que;
+		std::queue<Lexeme, std::list<Lexeme *> > *que;
 	public:
 		Lexer(int); // takes file descriptor
 		~Lexer();
@@ -34,7 +34,7 @@ namespace lava {
 	};
 
 	// function pointer type
-	typedef void *(Lexer::*LexFunc)() const = NULL
+	typedef void *(Lexer::*LexFunc)();
 
 }
 

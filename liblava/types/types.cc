@@ -1,35 +1,36 @@
 #include <vector>
+#include <string>
 #include "types.h"
 
 namespace lava {
 
-	char *TypeString(int typ) {
+	std::string TypeString(int typ) {
 
 		switch (typ) {
 			case TYPE_BP:
-				return (char *) "(";
+				return "(";
 
 			case TYPE_EP:
-				return (char *) ")";
+				return ")";
 
 			case TYPE_ID:
-				return (char *) "id";
+				return "id";
 
 			case TYPE_N:
-				return (char *) "n";
+				return "n";
 
 			case TYPE_C:
-				return (char *) "c";
+				return "c";
 
 			case TYPE_STR:
-				return (char *) "str";
+				return "str";
 
 			default:
-				return (char *) "unk";
+				return "unk";
 		}
 	}
 
-	Obj::toString() {
+	std::string Obj::toString() {
 		return TypeString(type);
 	}
 
@@ -40,11 +41,11 @@ namespace lava {
 	ObjTree::ObjTree(Obj *o, ObjTree *p) {
 		self = o;
 		parent = p;
-		children = std::vector<ObjTree *>(); // presized for 10 children
+		children = new std::vector<ObjTree *>(); // presized for 10 children
 	}
 
 	ObjTree::~ObjTree() {
-		delete children;
+		// delete children;
 		delete self;
 	}
 
