@@ -3,9 +3,6 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <string>
-#include <vector>
-
 namespace lava {
 
 	// types
@@ -33,26 +30,27 @@ namespace lava {
 		};
 	public:
 		Obj(int);
-		std::string toString();
+		~Obj();
+		char *toString();
 	};
 
 	// Abstract Syntax Tree
 	class ObjTree {
 		Obj *self;
 		ObjTree *parent;
-		std::vector<ObjTree *> *children; // array
+		ObjTree **children; // array
 	public:
 		ObjTree(Obj *, ObjTree *);
 		~ObjTree();
 	};
 
 	// Object storage: name & ptr to Obj
-/*	class ObjVar {
+	class ObjVar {
 		char *name;
 		Obj *obj;
-	};*/
+	};
 
-	std::string TypeString(int typ);
+	char *TypeString(int typ);
 
 }
 

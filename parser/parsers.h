@@ -4,7 +4,11 @@
 #ifndef PARSERS_H
 #define PARSERS_H
 
-void *parse_all(parser *p, lexeme *l);
-void *parse_op(parser *p, lexeme *l);
+namespace lava {
+
+  void *parse_all(Parser *p, Lexeme *l);
+  void *parse_op(Parser *p, Lexeme *l);
+
+}
 
 #endif

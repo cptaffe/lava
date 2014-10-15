@@ -1,29 +1,33 @@
-CC = clang
-CFLAGS += -Wall -g
+CC = clang++ # linking and stuff
+CXX = clang++ # actual compiler
+CXXFLAGS += -Wall -g
 
 # module definitions
 # liblava separate info (to allow library compilation, etc.)
 LAVADIR = liblava
-LAVASRC = $(LAVADIR)/err/err.c $(LAVADIR)/types/types.c
-LAVAHDRS = $(LAVADIR)/lava.h $(LAVADIR)/types/types.h $(LAVADIR)/err/err.h
+LAVAFILE = $(LAVADIR)/lava $(LAVADIR)/err/err $(LAVADIR)/types/types
+LAVASRC = $(addsuffix .cc, $(LAVAFILE))
+LAVAHDRS = $(LAVASRC:.cc=.h)
 
 LEXERDIR = lexer
-LEXERSRC = $(LEXERDIR)/lex.c $(LEXERDIR)/lexers.c $(LEXERDIR)/lexeme.c
-LEXERHDRS = $(LEXERSRC:.c=.h)
+LEXERFILE = $(LEXERDIR)/lex $(LEXERDIR)/lexers $(LEXERDIR)/lexeme
+LEXERSRC = $(addsuffix .cc, $(LEXERFILE))
+LEXERHDRS = $(LEXERSRC:.cc=.h)
 
 PARSERDIR = parser
-PARSERSRC = $(PARSERDIR)/parse.c $(PARSERDIR)/parsers.c
-PARSERHDRS = $(PARSERSRC:.c=.h)
+PARSERFILE = $(PARSERDIR)/parse $(PARSERDIR)/parsers
+PARSERSRC = $(addsuffix .cc, $(PARSERFILE))
+PARSERHDRS = $(PARSERSRC:.cc=.h)
 
 # include each module directory for header searching
 DIRS = $(LAVADIR) $(LEXERDIR) $(PARSERDIR)
-CFLAGS += $(addprefix -I, $(DIRS))
+CXXFLAGS += $(addprefix -I, $(DIRS))
 
 # lava compilation
-SRC = main.c $(LAVASRC) $(LEXERSRC) $(PARSERSRC)
+SRC = main.cc $(LAVASRC) $(LEXERSRC) $(PARSERSRC)
 HDRS = $(LAVAHDRS) $(LEXERHDRS) $(PARSERHDRS)
 
-OBJ = ${SRC:.c=.o}
+OBJ = ${SRC:.cc=.o}
 BIN = lava
 
 MEMCHK = valgrind

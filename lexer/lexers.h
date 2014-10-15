@@ -3,7 +3,13 @@
 #ifndef LEXERS_H
 #define LEXERS_H
 
-void *lex_all(lexer *l);
-void *lex_list(lexer *l);
+#include "lex.h"
+
+namespace lava {
+
+  void *lex_all(Lexer *l);
+  void *lex_list(Lexer *l);
+
+}
 
 #endif

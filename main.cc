@@ -17,18 +17,15 @@ int main(int argv, char *argc[]) {
 		printf("cannot open '%s'\n", argc[1]);
 		exit(1);
 	}
-	lexer *l = make_lexer(fd);
-	parser p = {.parser = parse_all, .parenDepth = 0};
-	obj_tree *pr = make_obj_tree(NULL, NULL);
-	p.root = pr;
-	p.current = pr;
+	lava::Lexer *l = new lava::Lexer(fd);
+	lava::Parser *p = new lava::Parser();
 
 	// parses one statement
-	lexeme *lexeme;
-	while ((lexeme = lex(l)) != NULL) {
-		parse(&p, lexeme);
+	lava::Lexeme *lexeme;
+	while ((lexeme = l->lex()) != NULL) {
+		p->parse(lexeme);
 	}
 
-	free_lexer(l);
-	free_obj_tree(p.root);
+	delete l;
+	delete p;
 }

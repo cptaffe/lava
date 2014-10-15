@@ -3,47 +3,41 @@
 #ifndef LEX_H
 #define LEX_H
 
+#include <string>
+#include <queue>
+
+namespace lava { class Lexer; }
+
 extern const size_t LEXBUFF;
 
+#include <list>
+#include <queue>
 #include "lexeme.h"
 
-// que of lexemes used by lexer
-typedef struct {
-	lexeme **que;
-	int top;
-	int bottom;
-} lexeme_que;
-
 // lexer struct
-typedef struct {
+class lava::Lexer {
+public:
 	int fd;
-	char *buf;
+	std::string *buf;
 	int len;
 	int front;
 	int back;
 	void *lexer; // current lexer
-	lexeme_que *que;
-} lexer;
+	std::queue<Lexeme *, std::list<Lexeme *> > *que;
+	Lexer(int); // takes file descriptor
+	~Lexer();
+	Lexeme *lex();
+	int next();
+	int backup();
+	char get();
+	std::string emit();
+	void dump();
+};
 
-typedef void *(* lex_func)(lexer *);
-
-// init value for lexer.lexer
-void *lex_all(lexer *l);
-
-// lexeme que
-lexeme *lex_que_get(lexeme_que *que);
-void lex_que_push(lexeme_que *que, lexeme *lex);
-
-// Lexical scanning
-lexer *make_lexer(int fd);
-void free_lexer(lexer *l);
-int lex_scan_next(lexer *l);
-int lex_scan_backup(lexer *l);
-char lex_scan_get(lexer *l);
-char *lex_scan_emit(lexer *l);
-void lex_scan_dump(lexer *l);
-
-// takes lexer, returns lexeme
-lexeme *lex(lexer *l);
+// function pointer type
+namespace lava {
+	typedef void *(*LexFunc)(Lexer *l);
+	void *lex_all(Lexer *l);
+}
 
 #endif
