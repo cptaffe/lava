@@ -5,15 +5,15 @@
 #include "lex.h"
 #include "lexers.h"
 
-static int isnum(char c) {
+static int isnum(const char c) {
 	return c <= '9' && c >= '0';
 }
 
-static int isalph(char c) {
+static int isalph(const char c) {
 	return c <= 'z' && c >= 'a';
 }
 
-static int isspace(char c) {
+static int isspace(const char c) {
 	return c == ' ' || c == '\t' || c == '\n';
 }
 

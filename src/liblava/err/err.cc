@@ -6,7 +6,7 @@
 namespace lava {
 
 // simple errors
-int Err(char *str, ...) {
+int Err(const char *str, ...) {
 	va_list vl;
 	va_start(vl, str);
 	fprintf(stderr, "err: ");

@@ -52,7 +52,7 @@ public:
 		Obj *obj;
 	};*/
 
-std::string TypeString(int typ);
+std::string TypeString(const int typ);
 
 }
 

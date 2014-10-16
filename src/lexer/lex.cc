@@ -7,7 +7,7 @@
 
 const size_t LEXBUF = 100;
 
-lava::Lexer::Lexer(int fd) {
+lava::Lexer::Lexer(const int fd) {
 	front = back = 0;
 	lexer = (void *) lex_all;
 	buf = new std::string(LEXBUF, 0);

@@ -4,7 +4,7 @@
 
 namespace lava {
 
-std::string TypeString(int typ) {
+std::string TypeString(const int typ) {
 	switch (typ) {
 		case TYPE_BP:
 			return "(";
