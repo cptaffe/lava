@@ -2,10 +2,6 @@
 // lava is an interpreter for the basilisk language >= v.05
 
 #include <unistd.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <stdio.h> // debug
-#include <string>
 #include <vector>
 #include "lex.h"
 
@@ -51,9 +47,8 @@ char lava::Lexer::get() {
 }
 
 // Emit allocated string containing lexed characters
-std::string lava::Lexer::emit() {
-	size_t size = front - back;
-	std::string nbuf = std::string(buf[back], size);
+std::string *lava::Lexer::emit() {
+	std::string *nbuf = new std::string(*buf, back, front - back);
 	back = front;
 	return nbuf;
 }
@@ -63,12 +58,19 @@ void lava::Lexer::dump() {
 	back = front;
 }
 
+// push to que
+void lava::Lexer::push(Lexeme *l) {
+	que->push(l);
+}
+
 // checks if lexeme is avaliable,
 // else runs state machine.
 lava::Lexeme *lava::Lexer::lex() {
 	while (lexer != NULL || !que->empty()) {
 		if (!que->empty()) {
-			return que->front();
+			Lexeme *l = que->front();
+			que->pop(); // removes value
+			return l;
 		} else {
 			lexer = ((LexFunc) lexer)(this);
 		}

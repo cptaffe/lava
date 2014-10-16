@@ -1,7 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <iostream>
 #include "lava.h"
 #include "lex.h"
 #include "parse.h"
@@ -22,8 +21,10 @@ int main(int argv, char *argc[]) {
 
 	// parses one statement
 	lava::Lexeme *lexeme;
+
 	while ((lexeme = l->lex()) != NULL) {
 		p->parse(lexeme);
+		//std::cout << "lex: " << "'" << lexeme->buf->c_str() << "'" << std::endl;
 	}
 
 	delete l;

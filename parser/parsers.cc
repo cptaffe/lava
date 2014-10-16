@@ -10,7 +10,7 @@ namespace lava {
 
 	void *parse_op(Parser *p, Lexeme *l) {
 		if (l->typ == TYPE_ID) {
-			printf("id '%s'\n", l->buf.c_str());
+			printf("id '%s'\n", l->buf->c_str());
 			return (void *) parse_all;
 		} else {
 			Err((char *) "unexpected type '%s' for '%s'", TypeString(l->typ).c_str(), 	TypeString(TYPE_ID).c_str());

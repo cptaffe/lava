@@ -4,19 +4,16 @@
 #define LEX_H
 
 #include <string>
+#include <list>
 #include <queue>
+#include "lexeme.h"
 
 namespace lava { class Lexer; }
 
 extern const size_t LEXBUFF;
 
-#include <list>
-#include <queue>
-#include "lexeme.h"
-
 // lexer struct
 class lava::Lexer {
-public:
 	int fd;
 	std::string *buf;
 	int len;
@@ -24,14 +21,16 @@ public:
 	int back;
 	void *lexer; // current lexer
 	std::queue<Lexeme *, std::list<Lexeme *> > *que;
+public:
 	Lexer(int); // takes file descriptor
 	~Lexer();
 	Lexeme *lex();
 	int next();
 	int backup();
 	char get();
-	std::string emit();
+	std::string *emit();
 	void dump();
+	void push(Lexeme *l);
 };
 
 // function pointer type
