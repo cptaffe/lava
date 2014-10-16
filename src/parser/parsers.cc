@@ -8,7 +8,7 @@ namespace lava {
 
 void *parse_op(Parser *p, Lexeme *l) {
 	if (l->typ == TYPE_ID) {
-		new ObjTree(new Obj(l->typ, l->buf), p->current); // attaches to current as child
+		p->current = new ObjTree(new Obj(l->typ, l->buf), p->current); // attaches to current as child
 		return (void *) parse_ops;
 	} else {
 		Err((char *) "unexpected type '%s' for '%s'", TypeString(l->typ).c_str(), 	TypeString(TYPE_ID).c_str());
@@ -31,7 +31,7 @@ void *parse_ops(Parser *p, Lexeme *l) {
 void *parse_all(Parser *p, Lexeme *l) {
 	if (l->typ == TYPE_BP) {
 		p->parenDepth++;
-		p->current = new ObjTree(new Obj(TYPE_BP), p->current);
+		// p->current = new ObjTree(new Obj(TYPE_BP), p->current);
 		return (void *) parse_op;
 	} else if (l->typ == TYPE_EP) {
 		p->parenDepth--;
