@@ -122,4 +122,13 @@ std::string *ObjTree::toString(std::string *str) {
 	return str;
 }
 
+ObjVar::ObjVar(std::string *str, Obj *obj) {
+	this->name = new std::string(*str);
+	this->obj = obj;
+}
+
+ObjVar::~ObjVar() {
+	delete name;
+}
+
 }

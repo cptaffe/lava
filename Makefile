@@ -20,17 +20,23 @@ PARSERDIR = $(SRCDIR)/parser
 PARSERFILES = parse parsers
 PARSERFILE = $(addprefix $(PARSERDIR)/, $(PARSERFILES))
 
+# FirstPass Module
+FIRSTPASSDIR = $(SRCDIR)/firstpass
+FIRSTPASSFILES = firstpass
+FIRSTPASSFILE = $(addprefix $(FIRSTPASSDIR)/, $(FIRSTPASSFILES))
+
 # small .cc files without headers
 HDRLESSDIR = $(SRCDIR)
 HDRLESSFILES = main
 HDRLESSFILE = $(addprefix $(HDRLESSDIR)/, $(HDRLESSFILES))
 
 # include each module directory for header searching
-DIRS = $(LAVADIR) $(LEXERDIR) $(PARSERDIR)
+DIRS = $(LAVADIR) $(LEXERDIR) $(PARSERDIR) $(FIRSTPASSDIR)
 CXXFLAGS += $(addprefix -I, $(DIRS))
 
 # lava compilation
-MODULESRC = $(addsuffix .cc, $(LAVAFILE) $(LEXERFILE) $(PARSERFILE))
+FILES = $(LAVAFILE) $(LEXERFILE) $(PARSERFILE) $(FIRSTPASSFILE)
+MODULESRC = $(addsuffix .cc, $(FILES))
 HDRS = $(MODULESRC:.cc=.h)
 SRC = $(addsuffix .cc, $(HDRLESSFILE)) $(MODULESRC) # headerless
 

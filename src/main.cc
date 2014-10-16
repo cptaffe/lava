@@ -4,6 +4,7 @@
 #include "lava.h"
 #include "lex.h"
 #include "parse.h"
+#include "firstpass.h"
 
 int main(int argv, char *argc[]) {
 	if (argv < 2) {
@@ -20,6 +21,7 @@ int main(int argv, char *argc[]) {
 
 	lava::Lexer *l = new lava::Lexer(fd);
 	lava::Parser *p = new lava::Parser();
+	lava::FirstPass *fp = new lava::FirstPass(p->root);
 	// parses one statement
 	lava::Lexeme *lexeme;
 
@@ -28,9 +30,11 @@ int main(int argv, char *argc[]) {
 
 		if (obj != NULL) {
 			std::cout << *obj->toString() << std::endl;
+			fp->Pass();
 		}
 	}
 
 	delete l;
 	delete p;
+	delete fp;
 }

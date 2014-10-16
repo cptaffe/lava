@@ -20,6 +20,7 @@ enum {
 
 // The Object type
 class Obj {
+public:
 	int type;
 	union {
 		// number (64 bit)
@@ -31,7 +32,6 @@ class Obj {
 		// pointer
 		void *ptr; // ids should point to symbol table
 	};
-public:
 	Obj(int);
 	Obj(int, int);
 	Obj(int, std::string *);
@@ -42,10 +42,10 @@ public:
 
 // Abstract Syntax Tree
 class ObjTree {
+public:
 	Obj *self;
 	ObjTree *parent;
 	std::vector<ObjTree *> *children; // array
-public:
 	ObjTree(Obj *, ObjTree *);
 	~ObjTree();
 	ObjTree *AddChild(ObjTree *);
@@ -57,10 +57,13 @@ private:
 };
 
 // Object storage: name & ptr to Obj
-/*	class ObjVar {
-		char *name;
-		Obj *obj;
-	};*/
+class ObjVar {
+	std::string *name;
+	Obj *obj;
+public:
+	ObjVar(std::string *, Obj *);
+	~ObjVar();
+};
 
 std::string TypeString(const int typ);
 
