@@ -22,7 +22,6 @@ namespace lava {
     ObjTree *obj;
     while ((lexeme = lexer->lex()) != NULL) {
       obj = parser->parse(lexeme);
-
       if (obj != NULL) {
         std::cout << *obj->toString() << std::endl;
         firstpass->Pass();

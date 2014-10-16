@@ -2,18 +2,19 @@
 // lava is an interpreter for the basilisk language >= v.05
 
 #include <unistd.h>
+#include <iostream>
 #include <vector>
 #include "lex.h"
 
-const size_t LEXBUF = 100;
+const size_t LEXBUF = 3;
 
 lava::Lexer::Lexer(const int fd) {
 	front = back = 0;
 	lexer = (void *) lex_all;
-	buf = new std::string(LEXBUF, 0);
+	buf = new std::vector<char>(LEXBUF);
 	que = new std::queue<Lexeme *, std::list<Lexeme *> >;
 	this->fd = fd;
-	len = read(fd, (void *) buf->c_str(), LEXBUF);
+	len = read(fd, (void *) &*buf->begin(), LEXBUF);
 }
 
 lava::Lexer::~Lexer() {
@@ -27,6 +28,17 @@ int lava::Lexer::next() {
 		front++;
 		return 1;
 	} else {
+		// allocate new string
+		std::cout << "OUT OF READ SPACE" << std::endl;
+		if (front - back > 0) {
+			// copy memory
+			std::string str = std::string((char *) &*buf->begin(), back, front-back);
+			std::cout << str << std::endl;
+		}
+		back = front = 0;
+		if (read(fd, (void *) &*buf->begin(), LEXBUF) > 0) {
+			return 1;
+		}
 		return 0;
 	}
 }
@@ -43,12 +55,12 @@ int lava::Lexer::backup() {
 
 // Get current character
 char lava::Lexer::get() {
-	return buf->c_str()[front - 1];
+	return (&*buf->begin())[front - 1];
 }
 
 // Emit allocated string containing lexed characters
 std::string *lava::Lexer::emit() {
-	std::string *nbuf = new std::string(*buf, back, front - back);
+	std::string *nbuf = new std::string((char *) &*buf->begin(), back, front - back);
 	back = front;
 	return nbuf;
 }
