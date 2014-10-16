@@ -6,7 +6,7 @@ SRCDIR = src
 
 # module definitions
 # liblava separate info (to allow library compilation, etc.)
-LAVADIR = $(SRCDIR)/liblava
+LAVADIR = $(SRCDIR)/lava
 LAVAFILES = lava err/err types/types
 LAVAFILE = $(addprefix $(LAVADIR)/, $(LAVAFILES))
 
