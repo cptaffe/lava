@@ -1,6 +1,6 @@
 CC = clang++ # linking and stuff
 CXX = clang++ # actual compiler
-CXXFLAGS += -Wall -g
+CXXFLAGS += -Wall -g -std=c++11
 
 SRCDIR = src
 

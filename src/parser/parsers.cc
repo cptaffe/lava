@@ -21,7 +21,7 @@ void *parse_ops(Parser *p, Lexeme *l) {
 		new ObjTree(new Obj(l->typ, l->buf), p->current); // attaches to current as child
 		return (void *) parse_ops;
 	} else if (l->typ == TYPE_N) {
-		new ObjTree(new Obj(l->typ, std::stoi(*l->buf, NULL)), p->current); // attaches to current as child
+		new ObjTree(new Obj(l->typ, std::stoi(*l->buf)), p->current); // attaches to current as child
 		return (void *) parse_ops;
 	} else {
 		return parse_all(p, l); // pass current lexeme to parse_all

@@ -7,15 +7,15 @@
 
 int main(int argv, char *argc[]) {
 	if (argv < 2) {
-		printf("need file name\n");
-		exit(1);
+		std::cout << "need file name" << std::endl;
+		return 1;
 	}
 
 	int fd = open(argc[1], O_RDONLY);
 
 	if (fd < 0) {
-		printf("cannot open '%s'\n", argc[1]);
-		exit(1);
+		std::cout << "cannot open " << "'" << argc[1] << "'" << std::endl;
+		return 1;
 	}
 
 	lava::Lexer *l = new lava::Lexer(fd);
