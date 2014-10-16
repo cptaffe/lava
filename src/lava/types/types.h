@@ -25,7 +25,7 @@ class Obj {
 		// number (64 bit)
 		long long int num;
 		// string
-		char *str;
+		std::string *str;
 		// character
 		char ch;
 		// pointer
@@ -33,6 +33,10 @@ class Obj {
 	};
 public:
 	Obj(int);
+	Obj(int, int);
+	Obj(int, std::string *);
+	Obj(int, char);
+	Obj(int, void *);
 	std::string toString();
 };
 
@@ -44,6 +48,12 @@ class ObjTree {
 public:
 	ObjTree(Obj *, ObjTree *);
 	~ObjTree();
+	ObjTree *AddChild(ObjTree *);
+	ObjTree *GetParent();
+	std::string *toString();
+private:
+	std::string *toString(std::string *str);
+	void AddParent(ObjTree *);
 };
 
 // Object storage: name & ptr to Obj

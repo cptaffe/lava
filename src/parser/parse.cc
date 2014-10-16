@@ -1,5 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "lava.h"
 #include "parse.h"
 
@@ -21,6 +19,7 @@ Parser::~Parser() {
 ObjTree *Parser::parse(Lexeme *l) {
 	if (l == NULL) {
 		delete l;
+		current = root;
 		return root;
 	} // assume eof, bail.
 
@@ -29,6 +28,7 @@ ObjTree *Parser::parse(Lexeme *l) {
 
 		if (current == NULL) {
 			delete l;
+			current = root;
 			return root;
 		}
 	}

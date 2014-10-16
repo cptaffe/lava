@@ -24,8 +24,11 @@ int main(int argv, char *argc[]) {
 	lava::Lexeme *lexeme;
 
 	while ((lexeme = l->lex()) != NULL) {
-		p->parse(lexeme);
-		// std::cout << "lex: " << "'" << lexeme->buf->c_str() << "'" << std::endl;
+		lava::ObjTree *obj = p->parse(lexeme);
+
+		if (obj != NULL) {
+			std::cout << *obj->toString() << std::endl;
+		}
 	}
 
 	delete l;

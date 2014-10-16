@@ -38,7 +38,7 @@ void *lava::lex_all(lava::Lexer *l) {
 void *lava::lex_list(lava::Lexer *l) {
 	if (!l->next()) {return NULL;}
 
-	if (l->get() == ')') {
+	if (l->get() == ')' || l->get() == '(') {
 		l->backup();
 		return (void *) lex_all;
 	} else if (isalph(l->get())) {
