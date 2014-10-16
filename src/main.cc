@@ -12,19 +12,20 @@ int main(int argv, char *argc[]) {
 	}
 
 	int fd = open(argc[1], O_RDONLY);
+
 	if (fd < 0) {
 		printf("cannot open '%s'\n", argc[1]);
 		exit(1);
 	}
+
 	lava::Lexer *l = new lava::Lexer(fd);
 	lava::Parser *p = new lava::Parser();
-
 	// parses one statement
 	lava::Lexeme *lexeme;
 
 	while ((lexeme = l->lex()) != NULL) {
 		p->parse(lexeme);
-		//std::cout << "lex: " << "'" << lexeme->buf->c_str() << "'" << std::endl;
+		// std::cout << "lex: " << "'" << lexeme->buf->c_str() << "'" << std::endl;
 	}
 
 	delete l;

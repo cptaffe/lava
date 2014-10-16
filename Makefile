@@ -7,27 +7,32 @@ SRCDIR = src
 # module definitions
 # liblava separate info (to allow library compilation, etc.)
 LAVADIR = $(SRCDIR)/liblava
-LAVAFILE = $(LAVADIR)/lava $(LAVADIR)/err/err $(LAVADIR)/types/types
-LAVASRC = $(addsuffix .cc, $(LAVAFILE))
-LAVAHDRS = $(LAVASRC:.cc=.h)
+LAVAFILES = lava err/err types/types
+LAVAFILE = $(addprefix $(LAVADIR)/, $(LAVAFILES))
 
+# Lexer Module
 LEXERDIR = $(SRCDIR)/lexer
-LEXERFILE = $(LEXERDIR)/lex $(LEXERDIR)/lexers $(LEXERDIR)/lexeme
-LEXERSRC = $(addsuffix .cc, $(LEXERFILE))
-LEXERHDRS = $(LEXERSRC:.cc=.h)
+LEXERFILES = lex lexers lexeme
+LEXERFILE = $(addprefix $(LEXERDIR)/, $(LEXERFILES))
 
+# Parser Module
 PARSERDIR = $(SRCDIR)/parser
-PARSERFILE = $(PARSERDIR)/parse $(PARSERDIR)/parsers
-PARSERSRC = $(addsuffix .cc, $(PARSERFILE))
-PARSERHDRS = $(PARSERSRC:.cc=.h)
+PARSERFILES = parse parsers
+PARSERFILE = $(addprefix $(PARSERDIR)/, $(PARSERFILES))
+
+# small .cc files without headers
+HDRLESSDIR = $(SRCDIR)
+HDRLESSFILES = main
+HDRLESSFILE = $(addprefix $(HDRLESSDIR)/, $(HDRLESSFILES))
 
 # include each module directory for header searching
 DIRS = $(LAVADIR) $(LEXERDIR) $(PARSERDIR)
 CXXFLAGS += $(addprefix -I, $(DIRS))
 
 # lava compilation
-SRC = $(SRCDIR)/main.cc $(LAVASRC) $(LEXERSRC) $(PARSERSRC)
-HDRS = $(LAVAHDRS) $(LEXERHDRS) $(PARSERHDRS)
+MODULESRC = $(addsuffix .cc, $(LAVAFILE) $(LEXERFILE) $(PARSERFILE))
+HDRS = $(MODULESRC:.cc=.h)
+SRC = $(addsuffix .cc, $(HDRLESSFILE)) $(MODULESRC) # headerless
 
 OBJ = $(SRC:.cc=.o)
 BIN = lava
@@ -41,7 +46,6 @@ DEBUGFLAGS =
 EDITOR = atom
 
 all: $(BIN)
-	rm $(OBJ) # some clean up
 
 # manual compile command, dirs apparently disable autocompiling.
 $(BIN): $(OBJ)

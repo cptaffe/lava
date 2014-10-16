@@ -6,8 +6,8 @@
 
 namespace lava {
 
-  void *parse_all(Parser *p, Lexeme *l);
-  void *parse_op(Parser *p, Lexeme *l);
+void *parse_all(Parser *p, Lexeme *l);
+void *parse_op(Parser *p, Lexeme *l);
 
 }
 
