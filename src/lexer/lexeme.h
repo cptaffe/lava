@@ -1,6 +1,6 @@
 
-#ifndef LEXEME_H
-#define LEXEME_H
+#ifndef LAVA_LEXER_LEXEME_H_
+#define LAVA_LEXER_LEXEME_H_
 
 #include <string>
 #include "lava.h"
@@ -18,4 +18,4 @@ namespace lava {
 
 }
 
-#endif
+#endif // LAVA_LEXER_LEXEME_H_

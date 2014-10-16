@@ -2,19 +2,21 @@ CC = clang++ # linking and stuff
 CXX = clang++ # actual compiler
 CXXFLAGS += -Wall -g
 
+SRCDIR = src
+
 # module definitions
 # liblava separate info (to allow library compilation, etc.)
-LAVADIR = liblava
+LAVADIR = $(SRCDIR)/liblava
 LAVAFILE = $(LAVADIR)/lava $(LAVADIR)/err/err $(LAVADIR)/types/types
 LAVASRC = $(addsuffix .cc, $(LAVAFILE))
 LAVAHDRS = $(LAVASRC:.cc=.h)
 
-LEXERDIR = lexer
+LEXERDIR = $(SRCDIR)/lexer
 LEXERFILE = $(LEXERDIR)/lex $(LEXERDIR)/lexers $(LEXERDIR)/lexeme
 LEXERSRC = $(addsuffix .cc, $(LEXERFILE))
 LEXERHDRS = $(LEXERSRC:.cc=.h)
 
-PARSERDIR = parser
+PARSERDIR = $(SRCDIR)/parser
 PARSERFILE = $(PARSERDIR)/parse $(PARSERDIR)/parsers
 PARSERSRC = $(addsuffix .cc, $(PARSERFILE))
 PARSERHDRS = $(PARSERSRC:.cc=.h)
@@ -24,10 +26,10 @@ DIRS = $(LAVADIR) $(LEXERDIR) $(PARSERDIR)
 CXXFLAGS += $(addprefix -I, $(DIRS))
 
 # lava compilation
-SRC = main.cc $(LAVASRC) $(LEXERSRC) $(PARSERSRC)
+SRC = $(SRCDIR)/main.cc $(LAVASRC) $(LEXERSRC) $(PARSERSRC)
 HDRS = $(LAVAHDRS) $(LEXERHDRS) $(PARSERHDRS)
 
-OBJ = ${SRC:.cc=.o}
+OBJ = $(SRC:.cc=.o)
 BIN = lava
 
 MEMCHK = valgrind
@@ -38,7 +40,8 @@ DEBUGFLAGS =
 
 EDITOR = atom
 
-all: lava $(BIN)
+all: $(BIN)
+	rm $(OBJ) # some clean up
 
 # manual compile command, dirs apparently disable autocompiling.
 $(BIN): $(OBJ)

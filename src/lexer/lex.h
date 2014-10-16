@@ -1,7 +1,7 @@
 // header for lexer
 
-#ifndef LEX_H
-#define LEX_H
+#ifndef LAVA_LEXER_LEX_H_
+#define LAVA_LEXER_LEX_H_
 
 #include <string>
 #include <list>
@@ -39,4 +39,4 @@ namespace lava {
 	void *lex_all(Lexer *l);
 }
 
-#endif
+#endif // LAVA_LEXER_LEX_H_

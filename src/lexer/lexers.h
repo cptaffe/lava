@@ -1,7 +1,7 @@
 // Lexers
 
-#ifndef LEXERS_H
-#define LEXERS_H
+#ifndef LAVA_LEXER_LEXERS_H_
+#define LAVA_LEXER_LEXERS_H_
 
 #include "lex.h"
 
@@ -12,4 +12,4 @@ namespace lava {
 
 }
 
-#endif
+#endif // LAVA_LEXER_LEXERS_H_

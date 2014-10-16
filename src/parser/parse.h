@@ -3,8 +3,8 @@
 // The parser takes lexemes, creates their associated object,
 // and puts them in a tree.
 
-#ifndef PARSE_H
-#define PARSE_H
+#ifndef LAVA_PARSER_PARSE_H_
+#define LAVA_PARSER_PARSE_H_
 
 #include "lava.h"
 #include "lexeme.h"
@@ -28,4 +28,4 @@ namespace lava {
 
 }
 
-#endif
+#endif // LAVA_PARSER_PARSE_H_

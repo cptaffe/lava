@@ -1,7 +1,10 @@
 // Defines types
 
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef LAVA_LAVA_TYPES_TYPES_H_
+#define LAVA_LAVA_TYPES_TYPES_H_
+
+#include <string>
+#include <vector>
 
 namespace lava {
 
@@ -30,28 +33,27 @@ namespace lava {
 		};
 	public:
 		Obj(int);
-		~Obj();
-		char *toString();
+		std::string toString();
 	};
 
 	// Abstract Syntax Tree
 	class ObjTree {
 		Obj *self;
 		ObjTree *parent;
-		ObjTree **children; // array
+		std::vector<ObjTree *> *children; // array
 	public:
 		ObjTree(Obj *, ObjTree *);
 		~ObjTree();
 	};
 
 	// Object storage: name & ptr to Obj
-	class ObjVar {
+/*	class ObjVar {
 		char *name;
 		Obj *obj;
-	};
+	};*/
 
-	char *TypeString(int typ);
+	std::string TypeString(int typ);
 
 }
 
-#endif
+#endif // LAVA_LAVA_TYPES_TYPES_H_

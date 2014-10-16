@@ -1,8 +1,8 @@
 
 // parsers defined here.
 
-#ifndef PARSERS_H
-#define PARSERS_H
+#ifndef LAVA_PARSER_PARSERS_H_
+#define LAVA_PARSER_PARSERS_H_
 
 namespace lava {
 
@@ -11,4 +11,4 @@ namespace lava {
 
 }
 
-#endif
+#endif // LAVA_PARSER_PARSERS_H_
