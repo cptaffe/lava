@@ -4,7 +4,7 @@
 #define LAVA_FIRSTPASS_FIRSTPASS_H
 
 #include "firstpass.h"
-#include "lava.h"
+#include "err/err.h"
 
 namespace lava {
 

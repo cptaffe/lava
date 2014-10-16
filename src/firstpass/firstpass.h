@@ -1,7 +1,10 @@
 // First pass optimizer
 // Consolidates references
 
-#include "lava.h"
+#ifndef LAVA_FIRSTPASS_FIRSTPASS_H_
+#define LAVA_FIRSTPASS_FIRSTPASS_H_
+
+#include "types/types.h"
 
 namespace lava {
 
@@ -16,3 +19,5 @@ namespace lava {
   };
 
 }
+
+#endif // LAVA_FIRSTPASS_FIRSTPASS_H_

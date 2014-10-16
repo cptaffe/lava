@@ -3,7 +3,6 @@
 #define LAVA_LEXER_LEXEME_H_
 
 #include <string>
-#include "lava.h"
 
 namespace lava {
 
