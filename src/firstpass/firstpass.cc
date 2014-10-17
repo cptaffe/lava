@@ -18,7 +18,7 @@ FirstPass::FirstPass(ObjTree *obj) {
 void FirstPass::Pass(ObjTree *obj) {
   if (obj->self != NULL) {
     if (obj->self->type == TYPE_ID) {
-      Err((char *) "undefined '%s'", obj->self->str);
+      Err((char *) "undefined '%s'", obj->self->str->c_str());
     }
   }
   if (!obj->children->empty()) {

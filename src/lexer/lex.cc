@@ -4,9 +4,10 @@
 #include <unistd.h>
 #include <iostream>
 #include <vector>
+#include <string.h> // memcpy
 #include "lex.h"
 
-const size_t LEXBUF = 3;
+const size_t LEXBUF = 10;
 
 lava::Lexer::Lexer(const int fd) {
 	front = back = 0;
@@ -23,39 +24,43 @@ lava::Lexer::~Lexer() {
 }
 
 // Advance lexer one character
-int lava::Lexer::next() {
+bool lava::Lexer::next() {
 	if (len > front) {
 		front++;
-		return 1;
+		return true;
 	} else {
-		// allocate new string
-		std::cout << "OUT OF READ SPACE" << std::endl;
-		if (front - back > 0) {
-			// copy memory
-			std::string str = std::string((char *) &*buf->begin(), back, front-back);
-			std::cout << str << std::endl;
+		int lexedlen = front - back;
+		if (lexedlen > 0) {
+			memcpy(&*buf->begin(), &*buf->begin() + back, lexedlen);
+			back = 0; front = lexedlen;
+		} else {
+			back = 0; front = 1;
 		}
-		back = front = 0;
-		if (read(fd, (void *) &*buf->begin(), LEXBUF) > 0) {
-			return 1;
+		len = read(fd, (void *) (&*buf->begin() + lexedlen), LEXBUF);
+		if (len > 0) {
+			len += lexedlen;
+			*((char *)  (&*buf->begin() + len)) = '\0';
+			// std::cout << "str: '" << (char *) &*buf->begin() << "', len: " << len << std::endl;
+			return true;
+		} else {
+			return false;
 		}
-		return 0;
 	}
 }
 
 // Backup lexer one character
-int lava::Lexer::backup() {
+bool lava::Lexer::backup() {
 	if (front > back) {
 		front--;
-		return 1;
+		return true;
 	} else {
-		return 0;
+		return false;
 	}
 }
 
 // Get current character
 char lava::Lexer::get() {
-	return (&*buf->begin())[front - 1];
+	return ((char *) &*buf->begin())[front - 1];
 }
 
 // Emit allocated string containing lexed characters

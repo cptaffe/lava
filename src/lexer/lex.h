@@ -26,8 +26,8 @@ public:
 	Lexer(int); // takes file descriptor
 	~Lexer();
 	Lexeme *lex();
-	int next();
-	int backup();
+	bool next();
+	bool backup();
 	char get();
 	std::string *emit();
 	void dump();
