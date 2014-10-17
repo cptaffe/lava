@@ -4,6 +4,7 @@
 #define LAVA_LEXER_LEX_H_
 
 #include <string>
+#include <vector>
 #include <list>
 #include <queue>
 #include "lexeme.h"
@@ -15,7 +16,7 @@ extern const size_t LEXBUFF;
 // lexer struct
 class lava::Lexer {
 	int fd;
-	std::string *buf;
+	std::vector<char> *buf;
 	int len;
 	int front;
 	int back;
@@ -25,8 +26,8 @@ public:
 	Lexer(int); // takes file descriptor
 	~Lexer();
 	Lexeme *lex();
-	int next();
-	int backup();
+	bool next();
+	bool backup();
 	char get();
 	std::string *emit();
 	void dump();

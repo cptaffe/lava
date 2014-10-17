@@ -1,7 +1,7 @@
 // Lexers.c
 // contains all lexers
-
-#include "lava.h"
+#include "types/types.h"
+#include "err/err.h"
 #include "lex.h"
 #include "lexers.h"
 

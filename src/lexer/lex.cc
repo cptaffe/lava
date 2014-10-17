@@ -2,18 +2,20 @@
 // lava is an interpreter for the basilisk language >= v.05
 
 #include <unistd.h>
+#include <iostream>
 #include <vector>
+#include <string.h> // memcpy
 #include "lex.h"
 
-const size_t LEXBUF = 100;
+const size_t LEXBUF = 10;
 
 lava::Lexer::Lexer(const int fd) {
 	front = back = 0;
 	lexer = (void *) lex_all;
-	buf = new std::string(LEXBUF, 0);
+	buf = new std::vector<char>(LEXBUF);
 	que = new std::queue<Lexeme *, std::list<Lexeme *> >;
 	this->fd = fd;
-	len = read(fd, (void *) buf->c_str(), LEXBUF);
+	len = read(fd, (void *) &*buf->begin(), LEXBUF);
 }
 
 lava::Lexer::~Lexer() {
@@ -22,33 +24,48 @@ lava::Lexer::~Lexer() {
 }
 
 // Advance lexer one character
-int lava::Lexer::next() {
+bool lava::Lexer::next() {
 	if (len > front) {
 		front++;
-		return 1;
+		return true;
 	} else {
-		return 0;
+		int lexedlen = front - back;
+		if (lexedlen > 0) {
+			memcpy(&*buf->begin(), &*buf->begin() + back, lexedlen);
+			back = 0; front = lexedlen;
+		} else {
+			back = 0; front = 1;
+		}
+		len = read(fd, (void *) (&*buf->begin() + lexedlen), LEXBUF);
+		if (len > 0) {
+			len += lexedlen;
+			*((char *)  (&*buf->begin() + len)) = '\0';
+			// std::cout << "str: '" << (char *) &*buf->begin() << "', len: " << len << std::endl;
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 
 // Backup lexer one character
-int lava::Lexer::backup() {
+bool lava::Lexer::backup() {
 	if (front > back) {
 		front--;
-		return 1;
+		return true;
 	} else {
-		return 0;
+		return false;
 	}
 }
 
 // Get current character
 char lava::Lexer::get() {
-	return buf->c_str()[front - 1];
+	return ((char *) &*buf->begin())[front - 1];
 }
 
 // Emit allocated string containing lexed characters
 std::string *lava::Lexer::emit() {
-	std::string *nbuf = new std::string(*buf, back, front - back);
+	std::string *nbuf = new std::string((char *) &*buf->begin(), back, front - back);
 	back = front;
 	return nbuf;
 }
