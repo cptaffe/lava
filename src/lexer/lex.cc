@@ -40,7 +40,6 @@ bool lava::Lexer::next() {
 		if (len > 0) {
 			len += lexedlen;
 			*((char *)  (&*buf->begin() + len)) = '\0';
-			// std::cout << "str: '" << (char *) &*buf->begin() << "', len: " << len << std::endl;
 			return true;
 		} else {
 			return false;
