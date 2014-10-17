@@ -9,12 +9,9 @@
 namespace lava {
 
   class FirstPass {
-    std::vector<ObjTree *> *children;
-    int index; // increment each time called.
+    //std::vector<ObjTree *> *children;
+    //int index; // increment each time called.
   public:
-    FirstPass(ObjTree *);
-    void Pass();
-  private:
     void Pass(ObjTree *);
   };
 

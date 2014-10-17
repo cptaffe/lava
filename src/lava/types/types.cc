@@ -97,12 +97,12 @@ ObjTree *ObjTree::GetParent() {
 	return parent;
 }
 
-std::string *ObjTree::toString() {
+std::string *ObjTree::toString() const {
 	std::string *str = new std::string();
-	return this->toString(str);
+	return toString(str);
 }
 
-std::string *ObjTree::toString(std::string *str) {
+std::string *ObjTree::toString(std::string *str) const {
 	if (self != NULL) {
 		str->append(self->toString());
 	}

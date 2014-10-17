@@ -8,7 +8,7 @@ namespace lava {
   Lava::Lava(int fp) {
     lexer = new Lexer(fp);
     parser = new Parser();
-    firstpass = new FirstPass(parser->root);
+    firstpass = new FirstPass();
   }
 
   Lava::~Lava() {
@@ -23,8 +23,8 @@ namespace lava {
     while ((lexeme = lexer->lex()) != NULL) {
       obj = parser->parse(lexeme);
       if (obj != NULL) {
-        std::cout << *obj->toString() << std::endl;
-        firstpass->Pass();
+        std::cout << *obj << std::endl;
+        firstpass->Pass(obj);
       }
     }
     return obj;

@@ -28,8 +28,10 @@ ObjTree *Parser::parse(Lexeme *l) {
 
 		if (current == NULL) {
 			delete l;
+			ObjTree *r = root;
+			root = new ObjTree(NULL, NULL);
 			current = root;
-			return root;
+			return r;
 		}
 	}
 
