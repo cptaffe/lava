@@ -23,8 +23,8 @@ namespace lava {
     while ((lexeme = lexer->lex()) != NULL) {
       obj = parser->parse(lexeme);
       if (obj != NULL) {
+        obj = firstpass->Pass(obj);
         std::cout << *obj << std::endl;
-        firstpass->Pass(obj);
       }
     }
     return obj;

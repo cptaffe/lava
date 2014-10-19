@@ -55,7 +55,7 @@ all: $(BIN)
 
 # manual compile command, dirs apparently disable autocompiling.
 $(BIN): $(OBJ)
-	$(CC) $(CFLAGS) -o $(BIN) $(OBJ)
+	$(CC) $(CFLAGS) -lpthread -o $(BIN) $(OBJ)
 
 $(OBJ): $(HDRS)
 
