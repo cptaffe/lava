@@ -39,6 +39,9 @@ public:
 	Obj(int, char);
 	Obj(int, void *);
 	std::string toString();
+	bool isId();
+	bool isNum();
+	bool isBuiltin();
 };
 
 // Abstract Syntax Tree

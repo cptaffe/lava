@@ -8,6 +8,7 @@
 
 #include "lava.h"
 #include "lexeme.h"
+#include "que.h"
 
 namespace lava {
 
@@ -16,10 +17,12 @@ public:
 	int parenDepth; // up & down tree
 	ObjTree *root;
 	ObjTree *current;
+	lava::que<Lexeme *> *que;
+	lava::que<ObjTree *> *objs;
 	void *parser;
-	Parser();
+	Parser(lava::que<Lexeme *> *);
 	~Parser();
-	ObjTree *parse(Lexeme *);
+	void parse();
 };
 
 typedef void *(*ParseFunc)(Parser *, Lexeme *);

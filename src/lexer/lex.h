@@ -8,6 +8,7 @@
 #include <list>
 #include <queue>
 #include "lexeme.h"
+#include "que.h"
 
 namespace lava { class Lexer; }
 
@@ -21,8 +22,8 @@ class lava::Lexer {
 	int front;
 	int back;
 	void *lexer; // current lexer
-	std::queue<Lexeme *, std::list<Lexeme *> > *que;
 public:
+	lava::que<Lexeme *> *que;
 	Lexer(int); // takes file descriptor
 	~Lexer();
 	Lexeme *lex();

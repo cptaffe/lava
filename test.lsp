@@ -1,3 +1,3 @@
-(add 1 (sub 1 2))
-(sub 1 2)
-(print (def 1 2))
+(+ 1 (- 1 2))
+(- 1 2)
+(def a (def b (def c (def d (def e (def f 2))))))

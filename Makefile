@@ -25,26 +25,33 @@ FIRSTPASSDIR = $(SRCDIR)/firstpass
 FIRSTPASSFILES = firstpass
 FIRSTPASSFILE = $(addprefix $(FIRSTPASSDIR)/, $(FIRSTPASSFILES))
 
+# Queue (que) Module
+QUEDIR = $(SRCDIR)/que
+QUEFILES = que
+QUEFILE = $(addprefix $(QUEDIR)/, $(QUEFILES))
+
 # LLVM Module
 LLVMFLAGS = `llvm-config --cxxflags --ldflags --libs core`
-CXXFLAGS += $(LLVMFLAGS)
 LLVMDIR = $(SRCDIR)/llvm
 LLVMFILES = llvm
 LLVMFILE = $(addprefix $(LLVMDIR)/, $(LLVMFILES))
+CXXFLAGS += -I$(LLVMDIR)/llvm/include -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS
 
 # small .cc files without headers
 HDRLESSDIR = $(SRCDIR)
 HDRLESSFILES = main
 HDRLESSFILE = $(addprefix $(HDRLESSDIR)/, $(HDRLESSFILES))
 
+HDRONLYFILE = $(QUEFILE) $(LAVADIR)/keywords/keywords
+
 # include each module directory for header searching
-DIRS = $(LAVADIR) $(LEXERDIR) $(PARSERDIR) $(FIRSTPASSDIR) $(LLVMDIR)
+DIRS = $(LAVADIR) $(LEXERDIR) $(PARSERDIR) $(FIRSTPASSDIR) $(LLVMDIR) $(QUEDIR)
 CXXFLAGS += $(addprefix -I, $(DIRS))
 
 # lava compilation
 FILES = $(LAVAFILE) $(LEXERFILE) $(PARSERFILE) $(FIRSTPASSFILE) $(LLVMFILE)
 MODULESRC = $(addsuffix .cc, $(FILES))
-HDRS = $(MODULESRC:.cc=.h)
+HDRS = $(MODULESRC:.cc=.h) $(addsuffix .h, $(HDRONLYFILE))
 SRC = $(addsuffix .cc, $(HDRLESSFILE)) $(MODULESRC) # headerless
 
 OBJ = $(SRC:.cc=.o)
@@ -62,7 +69,7 @@ all: $(BIN)
 
 # manual compile command, dirs apparently disable autocompiling.
 $(BIN): $(OBJ)
-	$(CC) $(CFLAGS) -lpthread -o $(BIN) $(OBJ)
+	$(CC) $(CFLAGS) $(LLVMFLAGS) -lpthread -o $(BIN) $(OBJ)
 
 $(OBJ): $(HDRS)
 

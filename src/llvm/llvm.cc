@@ -1,46 +1,37 @@
 
+#include <iostream>
 #include "llvm.h"
+#include "keywords/keywords.h"
+#include "err/err.h"
 
-static Module* makeLLVMModule();
+using namespace llvm;
 
-void lava::llvm::gen() {
-  Module* Mod = makeLLVMModule();
+// recursive code generation for select keywords
 
-  verifyModule(*Mod, PrintMessageAction);
+// TODO: note, this is super junky. The language can't
+// assume that '+', '-', etc. are language reserved.
 
-  PassManager PM;
-  PM.add(createPrintModulePass(&outs()));
-  PM.run(*Mod);
+static Module *TheModule;
+static IRBuilder<> Builder(getGlobalContext());
+static std::map<std::string, Value*> NamedValues;
 
-  delete Mod;
-  return 0;
+// generates IR for builtin
+static Value *genBuiltin(lava::ObjTree &obj) {
+  if (obj.self->str->compare(lava::KEYWORD_ADD) == 0) {
+    std::cout << "add" << std::endl;
+  }
+  return NULL;
 }
 
-Module* makeLLVMModule() {
-  // Module Construction
-  Module* mod = new Module("test", getGlobalContext());
-  Constant* c = mod->getOrInsertFunction("mul_add",
-  /*ret type*/                           IntegerType::get(32),
-  /*args*/                               IntegerType::get(32),
-                                         IntegerType::get(32),
-                                         IntegerType::get(32),
-  /*varargs terminated with null*/       NULL);
+void lava::llvm::gen(ObjTree &obj) {
+  if (obj.self == NULL) {
+    for (std::vector<ObjTree *>::iterator it = obj.children->begin(); it != obj.children->end(); it++) {gen(**it);}
+    return;
+  }
 
-  Function* mul_add = cast<Function>(c);
-  mul_add->setCallingConv(CallingConv::C);
-  Function::arg_iterator args = mul_add->arg_begin();
-  Value* x = args++;
-  x->setName("x");
-  Value* y = args++;
-  y->setName("y");
-  Value* z = args++;
-  z->setName("z");
-  BasicBlock* block = BasicBlock::Create(getGlobalContext(), "entry", mul_add);
-  IRBuilder<> builder(block);
-  Value* tmp = builder.CreateBinOp(Instruction::Mul, x, y, "tmp");
-  Value* tmp2 = builder.CreateBinOp(Instruction::Add, tmp, z, "tmp2");
-
-  builder.CreateRet(tmp2);
-
-  return mod;
+  Obj &o = *obj.self;
+  if (o.isId() && o.isBuiltin()) {
+    genBuiltin(obj);
+  }
+  else {err << "(!) not a compilable fn: " << obj << "\n";}
 }

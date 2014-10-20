@@ -5,6 +5,9 @@
 
 #include <iostream>
 
+// TODO: completely rewrite to globally collect messages
+// in lava & async print them or something.
+
 namespace lava {
   class Err {
     std::ostream *out;

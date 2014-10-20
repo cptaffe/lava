@@ -8,7 +8,6 @@
 #include "types/types.h"
 #include "err/err.h"
 #include "keywords/keywords.h"
-#include "llvm.h"
 
 namespace lava {
 
@@ -22,8 +21,6 @@ FirstPass::~FirstPass() {
 
 ObjTree *FirstPass::Pass(ObjTree *obj) {
     obj = DefTraverse(obj);
-    llvm *l = new llvm;
-    l.gen();
     return obj;
 }
 
@@ -35,9 +32,10 @@ ObjTree *FirstPass::DefTraverse(ObjTree *obj) {
             if (obj->children->at(0)->self->type == TYPE_ID) {
                 // Add tree as arg to async
                 symtable->insert(std::make_pair<std::string, std::future<ObjTree *> >(std::string(*obj->children->at(0)->self->str), std::future<ObjTree *>(std::async(std::launch::async, [](ObjTree* obj){
-                std::cout << *obj << std::endl;
-                return obj;
-            }, obj))));
+                  // lambda function
+                  std::cout << *obj << std::endl;
+                  return obj;
+                }, obj))));
             return obj->children->at(0);
             } else {
                 err << "'def': must have id literal, found '" << *obj->children->at(0) << "'" << "\n";

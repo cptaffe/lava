@@ -1,7 +1,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "types.h"
+#include "types/types.h"
+#include "keywords/keywords.h"
 
 namespace lava {
 
@@ -9,31 +10,41 @@ std::string TypeString(const int typ) {
 	switch (typ) {
 		case TYPE_BP:
 			return "(";
-
 		case TYPE_EP:
 			return ")";
-
 		case TYPE_ID:
 			return "id";
-
 		case TYPE_N:
 			return "n";
-
 		case TYPE_C:
 			return "c";
-
 		case TYPE_STR:
 			return "str";
-
 		default:
 			return "unk";
 	}
-
 	return "WTDKSDHFOSJFL";
 }
 
+// Obj utilities
 std::string Obj::toString() {
 	return TypeString(type);
+}
+
+// is obj an id?
+bool Obj::isId() {
+	return type == TYPE_ID;
+}
+
+// is obj an num?
+bool Obj::isNum() {
+	return type == TYPE_N;
+}
+
+// is id a keyword?
+bool Obj::isBuiltin() {
+	if (str->compare(KEYWORD_ADD) == 0 || str->compare(KEYWORD_SUB) == 0 || str->compare(KEYWORD_MUL) == 0 || str->compare(KEYWORD_DIV) == 0) {return true;}
+	else {return false;}
 }
 
 Obj::Obj(int typ) {

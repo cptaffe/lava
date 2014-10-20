@@ -4,22 +4,20 @@
 #define LAVA_LLVM_LLVM_H_
 
 // fuck ton of llvm includes
-#include "llvm/Module.h"
-#include "llvm/Function.h"
-#include "llvm/PassManager.h"
-#include "llvm/CallingConv.h"
-#include "llvm/Analysis/Verifier.h"
-#include "llvm/Assembly/PrintModulePass.h"
-#include "llvm/Support/IRBuilder.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm/IR/Verifier.h"
+#include "llvm/IR/DerivedTypes.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
+#include "types/types.h"
 
 namespace lava {
 
 class llvm {
 public:
-  void gen();
-}
+  void gen(ObjTree &);
+};
 
 }
 
-#endif LAVA_LLVM_LLVM_H_
+#endif // LAVA_LLVM_LLVM_H_
