@@ -25,17 +25,24 @@ FIRSTPASSDIR = $(SRCDIR)/firstpass
 FIRSTPASSFILES = firstpass
 FIRSTPASSFILE = $(addprefix $(FIRSTPASSDIR)/, $(FIRSTPASSFILES))
 
+# LLVM Module
+LLVMFLAGS = `llvm-config --cxxflags --ldflags --libs core`
+CXXFLAGS += $(LLVMFLAGS)
+LLVMDIR = $(SRCDIR)/llvm
+LLVMFILES = llvm
+LLVMFILE = $(addprefix $(LLVMDIR)/, $(LLVMFILES))
+
 # small .cc files without headers
 HDRLESSDIR = $(SRCDIR)
 HDRLESSFILES = main
 HDRLESSFILE = $(addprefix $(HDRLESSDIR)/, $(HDRLESSFILES))
 
 # include each module directory for header searching
-DIRS = $(LAVADIR) $(LEXERDIR) $(PARSERDIR) $(FIRSTPASSDIR)
+DIRS = $(LAVADIR) $(LEXERDIR) $(PARSERDIR) $(FIRSTPASSDIR) $(LLVMDIR)
 CXXFLAGS += $(addprefix -I, $(DIRS))
 
 # lava compilation
-FILES = $(LAVAFILE) $(LEXERFILE) $(PARSERFILE) $(FIRSTPASSFILE)
+FILES = $(LAVAFILE) $(LEXERFILE) $(PARSERFILE) $(FIRSTPASSFILE) $(LLVMFILE)
 MODULESRC = $(addsuffix .cc, $(FILES))
 HDRS = $(MODULESRC:.cc=.h)
 SRC = $(addsuffix .cc, $(HDRLESSFILE)) $(MODULESRC) # headerless
@@ -58,6 +65,9 @@ $(BIN): $(OBJ)
 	$(CC) $(CFLAGS) -lpthread -o $(BIN) $(OBJ)
 
 $(OBJ): $(HDRS)
+
+info:
+	# $(FILES)
 
 clean:
 	rm -rf $(OBJ) $(BIN)

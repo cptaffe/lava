@@ -8,6 +8,7 @@
 #include "types/types.h"
 #include "err/err.h"
 #include "keywords/keywords.h"
+#include "llvm.h"
 
 namespace lava {
 
@@ -21,13 +22,14 @@ FirstPass::~FirstPass() {
 
 ObjTree *FirstPass::Pass(ObjTree *obj) {
     obj = DefTraverse(obj);
+    llvm *l = new llvm;
+    l.gen();
     return obj;
 }
 
 // builds hash table from def'd ids, mitigating side effects of def.
 ObjTree *FirstPass::DefTraverse(ObjTree *obj) {
     if (obj->self != NULL && obj->self->type == TYPE_ID && obj->self->str->compare(KEYWORD_DEF) == 0) {
-        std::cout << "GOT ONE" << std::endl;
         // type checking
         if (obj->children->size() > 1) {
             if (obj->children->at(0)->self->type == TYPE_ID) {
@@ -38,11 +40,11 @@ ObjTree *FirstPass::DefTraverse(ObjTree *obj) {
             }, obj))));
             return obj->children->at(0);
             } else {
-                Err((char *) "'def' must have id literal, found %s", obj->children->at(0));
+                err << "'def': must have id literal, found '" << *obj->children->at(0) << "'" << "\n";
                 return obj;
             }
         } else {
-            Err((char *) "'def' with nothing to define");
+            err << "'def': nothing to define" << "\n";
             return obj;
         }
     }

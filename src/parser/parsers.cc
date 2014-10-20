@@ -11,7 +11,7 @@ void *parse_op(Parser *p, Lexeme *l) {
 		p->current = new ObjTree(new Obj(l->typ, l->buf), p->current); // attaches to current as child
 		return (void *) parse_ops;
 	} else {
-		Err((char *) "unexpected type '%s' for '%s'", TypeString(l->typ).c_str(), 	TypeString(TYPE_ID).c_str());
+		err << "unexpected type '" << TypeString(l->typ).c_str() << "' for '" << TypeString(TYPE_ID).c_str() << "'" << "\n";
 		return (void *) parse_all;
 	}
 }
@@ -41,7 +41,7 @@ void *parse_all(Parser *p, Lexeme *l) {
 			p->current = NULL;
 			return (void *) parse_all;
 		} else if (p->parenDepth < 0) {
-			Err((char *) "extraneos ')'");
+			err << "extraneos ')'" << "\n";
 			p->current = NULL;
 			return (void *) parse_all;
 		}

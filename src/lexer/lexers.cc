@@ -29,7 +29,7 @@ void *lava::lex_all(lava::Lexer *l) {
 	} else if (isspace(l->get())) {
 		l->dump();
 	} else {
-		lava::Err((char *) "unknown symbol '%c' '%s'", l->get(), l->emit()->c_str());
+		err << "unknown symbol '" << l->get() << "' '" << l->emit()->c_str() << "'" << "\n";
 	}
 
 	return (void *) lex_all;
@@ -44,7 +44,7 @@ void *lava::lex_list(lava::Lexer *l) {
 	} else if (isalph(l->get())) {
 		while (isalph(l->get())) {
 			if (!l->next()) {
-				lava::Err((char *) "unexpected eof");
+				//lava::Err((char *) "unexpected eof");
 				return NULL;
 			}
 		}
@@ -55,7 +55,7 @@ void *lava::lex_list(lava::Lexer *l) {
 	} else if (isnum(l->get())) {
 		while (isnum(l->get())) {
 			if (!l->next()) {
-				lava::Err((char *) "unexpected eof");
+				lava::err << "unexpected eof" << "\n";
 				return NULL;
 			}
 		}
@@ -66,7 +66,7 @@ void *lava::lex_list(lava::Lexer *l) {
 	} else if (isspace(l->get())) {
 		l->dump();
 	} else {
-		lava::Err((char *) "unknown symbol '%c' '%s'", l->get(), l->emit()->c_str());
+		lava::err << "unknown symbol" << "'" << l->get() << "' \"" << l->emit()->c_str() << "\n";
 	}
 
 	return (void *) lex_list;

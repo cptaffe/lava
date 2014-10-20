@@ -11,8 +11,15 @@
 namespace lava {
 
 class FirstPass {
-    // Hash Map of id names and futures (from their evaluation)
-    std::unordered_map<std::string, std::future<ObjTree *> > *symtable; // hash map
+    // Hash Map provides best case O(1) lookup, futures provide convenient concurrent execution.
+    std::unordered_map<std::string, std::future<ObjTree *> > *symtable;
+
+    // TODO: implement lazy-evaluation dependency graph for each def.
+    // TODO: implement topological sorting for this graph.
+    // TODO: implement implement compiling of functions to llvm ir before running,
+    // i.e. defs are always in compiler space. This is done by condensing the function to
+    // the least dependant implementation.
+
 public:
     FirstPass();
     ~FirstPass();
