@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <ostream>
 
 namespace lava {
 
@@ -37,7 +38,11 @@ public:
 	Obj(int, std::string *);
 	Obj(int, char);
 	Obj(int, void *);
+	~Obj();
 	std::string toString();
+	bool isId();
+	bool isNum();
+	bool isBuiltin();
 };
 
 // Abstract Syntax Tree
@@ -50,11 +55,16 @@ public:
 	~ObjTree();
 	ObjTree *AddChild(ObjTree *);
 	ObjTree *GetParent();
-	std::string *toString();
+	std::string *toString() const;
 private:
-	std::string *toString(std::string *str);
+	std::string *toString(std::string *) const;
 	void AddParent(ObjTree *);
 };
+
+inline std::ostream &operator<<(std::ostream &Str, ObjTree const &v) {
+	Str << *v.toString();
+	return Str;
+}
 
 // Object storage: name & ptr to Obj
 class ObjVar {

@@ -4,9 +4,9 @@
 
 namespace lava {
 
-Lexeme::Lexeme(const int typ, const std::string *buf) {
+Lexeme::Lexeme(const int typ, std::string *buf) {
 	this->typ = typ;
-	this->buf = new std::string(*buf);
+	this->buf = buf;
 }
 
 Lexeme::~Lexeme() {

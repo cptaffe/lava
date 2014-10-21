@@ -6,6 +6,7 @@
 #include <vector>
 #include <string.h> // memcpy
 #include "lex.h"
+#include "que.h"
 
 const size_t LEXBUF = 10;
 
@@ -13,19 +14,19 @@ lava::Lexer::Lexer(const int fd) {
 	front = back = 0;
 	lexer = (void *) lex_all;
 	buf = new std::vector<char>(LEXBUF);
-	que = new std::queue<Lexeme *, std::list<Lexeme *> >;
+	que = new lava::que<Lexeme *>;
 	this->fd = fd;
 	len = read(fd, (void *) &*buf->begin(), LEXBUF);
 }
 
 lava::Lexer::~Lexer() {
 	delete que;
-	// delete buf;
+	delete buf;
 }
 
 // Advance lexer one character
 bool lava::Lexer::next() {
-	if (len > front) {
+	if (len > (front - 1)) {
 		front++;
 		return true;
 	} else {
@@ -40,7 +41,6 @@ bool lava::Lexer::next() {
 		if (len > 0) {
 			len += lexedlen;
 			*((char *)  (&*buf->begin() + len)) = '\0';
-			// std::cout << "str: '" << (char *) &*buf->begin() << "', len: " << len << std::endl;
 			return true;
 		} else {
 			return false;
@@ -83,15 +83,10 @@ void lava::Lexer::push(Lexeme *l) {
 // checks if lexeme is avaliable,
 // else runs state machine.
 lava::Lexeme *lava::Lexer::lex() {
-	while (lexer != NULL || !que->empty()) {
-		if (!que->empty()) {
-			Lexeme *l = que->front();
-			que->pop(); // removes value
-			return l;
-		} else {
-			lexer = ((LexFunc) lexer)(this);
-		}
+	while (lexer != NULL) {
+		lexer = ((LexFunc) lexer)(this);
 	}
 
+	que->finish();
 	return NULL;
 }

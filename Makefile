@@ -25,26 +25,33 @@ FIRSTPASSDIR = $(SRCDIR)/firstpass
 FIRSTPASSFILES = firstpass
 FIRSTPASSFILE = $(addprefix $(FIRSTPASSDIR)/, $(FIRSTPASSFILES))
 
+# Queue (que) Module
+QUEDIR = $(SRCDIR)/que
+QUEFILES = que
+QUEFILE = $(addprefix $(QUEDIR)/, $(QUEFILES))
+
 # small .cc files without headers
 HDRLESSDIR = $(SRCDIR)
 HDRLESSFILES = main
 HDRLESSFILE = $(addprefix $(HDRLESSDIR)/, $(HDRLESSFILES))
 
+HDRONLYFILE = $(QUEFILE) $(LAVADIR)/keywords/keywords
+
 # include each module directory for header searching
-DIRS = $(LAVADIR) $(LEXERDIR) $(PARSERDIR) $(FIRSTPASSDIR)
+DIRS = $(LAVADIR) $(LEXERDIR) $(PARSERDIR) $(FIRSTPASSDIR) $(LLVMDIR) $(QUEDIR)
 CXXFLAGS += $(addprefix -I, $(DIRS))
 
 # lava compilation
-FILES = $(LAVAFILE) $(LEXERFILE) $(PARSERFILE) $(FIRSTPASSFILE)
+FILES = $(LAVAFILE) $(LEXERFILE) $(PARSERFILE) $(FIRSTPASSFILE) $(LLVMFILE)
 MODULESRC = $(addsuffix .cc, $(FILES))
-HDRS = $(MODULESRC:.cc=.h)
+HDRS = $(MODULESRC:.cc=.h) $(addsuffix .h, $(HDRONLYFILE))
 SRC = $(addsuffix .cc, $(HDRLESSFILE)) $(MODULESRC) # headerless
 
 OBJ = $(SRC:.cc=.o)
 BIN = lava
 
 MEMCHK = valgrind
-MEMCHKFLAGS = --leak-check=full
+MEMCHKFLAGS = --leak-check=full --show-leak-kinds=all
 
 DEBUG = lldb
 DEBUGFLAGS =
@@ -55,9 +62,12 @@ all: $(BIN)
 
 # manual compile command, dirs apparently disable autocompiling.
 $(BIN): $(OBJ)
-	$(CC) $(CFLAGS) -o $(BIN) $(OBJ)
+	$(CC) $(CFLAGS) $(LLVMFLAGS) -lpthread -o $(BIN) $(OBJ)
 
 $(OBJ): $(HDRS)
+
+info:
+	# $(FILES)
 
 clean:
 	rm -rf $(OBJ) $(BIN)
@@ -71,7 +81,7 @@ edit:
 
 # valgrind memory check on binary
 memcheck: $(BIN)
-	$(MEMCHK) $(MEMCHKFLAGS) ./$(BIN)
+	$(MEMCHK) $(MEMCHKFLAGS) ./$(BIN) test.lsp
 
 # debugging
 debug: $(BIN)
