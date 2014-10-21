@@ -7,6 +7,7 @@
 #ifndef LAVA_LAVA_QUE_QUE_H_
 #define LAVA_LAVA_QUE_QUE_H_
 
+#include <iostream>
 #include <queue>
 #include <thread>
 #include <mutex>
@@ -17,6 +18,7 @@ namespace lava {
 template <typename T>
 class que {
  public:
+
 
   T pop()
   {
@@ -32,9 +34,14 @@ class que {
 
   void pop(T& item) {
     std::unique_lock<std::mutex> mlock(mutex_);
-    while (queue_.empty())
+    while (queue_.empty() && !isDone())
     {
+        // std::cout << "waiting" << std::endl;
       cond_.wait(mlock);
+    }
+    if (isDone() && queue_.empty()) {
+        item = NULL;
+        return;
     }
     item = queue_.front();
     queue_.pop();
@@ -47,6 +54,16 @@ class que {
     cond_.notify_one();
   }
 
+  void finish() {
+    // std::cout << "finishing..." << std::endl;
+     std::unique_lock<std::mutex> mlock(mutex_);
+     done_ = true;
+     mlock.unlock();
+     cond_.notify_all();
+    // std::cout << "finished" << std::endl;
+  }
+
+  bool isDone() {return done_;}
   que()=default;
   que(const que&) = delete;            // disable copying
   que& operator=(const que&) = delete; // disable assignment
@@ -55,6 +72,7 @@ class que {
   std::queue<T> queue_;
   std::mutex mutex_;
   std::condition_variable cond_;
+  bool done_ = false;
 };
 
 }

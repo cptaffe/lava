@@ -21,29 +21,32 @@ Parser::~Parser() {
 // Returns NULL until a full tree has been built, then returns tree.
 void Parser::parse() {
 
-	while (current != NULL) {
-		Lexeme *l;
-		que->pop(l);
+	while (true) {
+		while (current != NULL) {
+			Lexeme *l;
+			que->pop(l);
 
-		if (l == NULL) {
+			if (l == NULL) {
+				delete l;
+				objs->push(root);
+				root = new ObjTree(NULL, NULL);
+				current = root;
+				objs->finish();
+				return;
+			} // assume eof, bail.
+
+			if (parser != NULL) {
+				parser = ((ParseFunc) parser)(this, l);
+			}
+
 			delete l;
-			objs->push(root);
-			root = new ObjTree(NULL, NULL);
-			current = root;
-			return;
-		} // assume eof, bail.
-
-		if (parser != NULL) {
-			parser = ((ParseFunc) parser)(this, l);
 		}
 
-		delete l;
+		// when current is null
+		objs->push(root);
+		root = new ObjTree(NULL, NULL);
+		current = root;
 	}
-
-	// when current is null
-	objs->push(root);
-	root = new ObjTree(NULL, NULL);
-	current = root;
 }
 
 }

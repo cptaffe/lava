@@ -16,6 +16,10 @@ FirstPass::FirstPass() {
 }
 
 FirstPass::~FirstPass() {
+    for (auto it = symtable->begin(); it != symtable->end(); it++) {
+        delete &it->first;
+        delete &it->second;
+    }
     delete symtable;
 }
 
@@ -31,12 +35,23 @@ ObjTree *FirstPass::DefTraverse(ObjTree *obj) {
         if (obj->children->size() > 1) {
             if (obj->children->at(0)->self->type == TYPE_ID) {
                 // Add tree as arg to async
-                symtable->insert(std::make_pair<std::string, std::future<ObjTree *> >(std::string(*obj->children->at(0)->self->str), std::future<ObjTree *>(std::async(std::launch::async, [](ObjTree* obj){
-                  // lambda function
-                  std::cout << *obj << std::endl;
-                  return obj;
-                }, obj))));
-            return obj->children->at(0);
+                if (!symtable->count(std::string(*obj->children->at(0)->self->str))) {
+                    symtable->insert(std::make_pair<std::string, std::future<ObjTree *> >(std::string(*obj->children->at(0)->self->str), std::future<ObjTree *>(std::async(std::launch::async, [](ObjTree* obj){
+                      // lambda function
+                      std::cout << *obj << std::endl;
+                      return obj;
+                    }, obj))));
+                    return obj->children->at(0);
+                } else {
+                    // memory management...
+                    delete obj->self;
+                    ObjTree *ret = obj->children->at(0);
+                    for (std::vector<ObjTree *>::iterator it = obj->children->begin() + 1; it != obj->children->end(); it++) {
+                      delete *it;
+                    }
+                    delete obj->children;
+                    return ret;
+                }
             } else {
                 err << "'def': must have id literal, found '" << *obj->children->at(0) << "'" << "\n";
                 return obj;

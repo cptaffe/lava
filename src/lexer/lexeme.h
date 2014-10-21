@@ -11,7 +11,7 @@ class Lexeme {
 public:
 	std::string *buf;
 	int typ;
-	Lexeme(const int typ, const std::string *buf);
+	Lexeme(const int typ, std::string *buf);
 	~Lexeme();
 };
 

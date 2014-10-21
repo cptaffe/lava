@@ -26,7 +26,7 @@ lava::Lexer::~Lexer() {
 
 // Advance lexer one character
 bool lava::Lexer::next() {
-	if (len > front) {
+	if (len > (front - 1)) {
 		front++;
 		return true;
 	} else {
@@ -87,5 +87,6 @@ lava::Lexeme *lava::Lexer::lex() {
 		lexer = ((LexFunc) lexer)(this);
 	}
 
+	que->finish();
 	return NULL;
 }

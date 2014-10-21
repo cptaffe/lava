@@ -10,14 +10,12 @@
 #include "lex.h" // lexer
 #include "parse.h" // parser
 #include "firstpass.h" // first pass optimizer
-#include "llvm.h"
 
 namespace lava {
   class Lava {
     Parser *parser;
     Lexer *lexer;
     FirstPass *firstpass;
-    llvm *llvm;
   public:
     Lava(int);
     ~Lava();

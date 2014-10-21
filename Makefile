@@ -30,13 +30,6 @@ QUEDIR = $(SRCDIR)/que
 QUEFILES = que
 QUEFILE = $(addprefix $(QUEDIR)/, $(QUEFILES))
 
-# LLVM Module
-LLVMFLAGS = `llvm-config --cxxflags --ldflags --libs core`
-LLVMDIR = $(SRCDIR)/llvm
-LLVMFILES = llvm
-LLVMFILE = $(addprefix $(LLVMDIR)/, $(LLVMFILES))
-CXXFLAGS += -I$(LLVMDIR)/llvm/include -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS
-
 # small .cc files without headers
 HDRLESSDIR = $(SRCDIR)
 HDRLESSFILES = main
@@ -58,7 +51,7 @@ OBJ = $(SRC:.cc=.o)
 BIN = lava
 
 MEMCHK = valgrind
-MEMCHKFLAGS = --leak-check=full
+MEMCHKFLAGS = --leak-check=full --show-leak-kinds=all
 
 DEBUG = lldb
 DEBUGFLAGS =
@@ -88,7 +81,7 @@ edit:
 
 # valgrind memory check on binary
 memcheck: $(BIN)
-	$(MEMCHK) $(MEMCHKFLAGS) ./$(BIN)
+	$(MEMCHK) $(MEMCHKFLAGS) ./$(BIN) test.lsp
 
 # debugging
 debug: $(BIN)

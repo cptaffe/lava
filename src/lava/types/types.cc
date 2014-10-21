@@ -49,26 +49,36 @@ bool Obj::isBuiltin() {
 
 Obj::Obj(int typ) {
 	this->type = typ;
+	this->str = NULL;
 }
 
 Obj::Obj(int typ, int num) {
 	this->type = typ;
+	this->str = NULL;
 	this->num = num;
 }
 
 Obj::Obj(int typ, std::string *str) {
 	this->type = typ;
-	this->str = new std::string(*str);
+	this->str = str;
 }
 
 Obj::Obj(int typ, char ch) {
 	this->type = typ;
 	this->ch = ch;
+	this->str = NULL;
 }
 
 Obj::Obj(int typ, void *ptr) {
 	this->type = typ;
 	this->ptr = ptr;
+	this->str = NULL;
+}
+
+Obj::~Obj() {
+	if (str != NULL) {
+		delete str;
+	}
 }
 
 ObjTree::ObjTree(Obj *o, ObjTree *p) {

@@ -38,6 +38,7 @@ public:
 	Obj(int, std::string *);
 	Obj(int, char);
 	Obj(int, void *);
+	~Obj();
 	std::string toString();
 	bool isId();
 	bool isNum();
