@@ -75,11 +75,7 @@ Obj::Obj(int typ, void *ptr) {
 	this->str = NULL;
 }
 
-Obj::~Obj() {
-	if (str != NULL) {
-		delete str;
-	}
-}
+Obj::~Obj() {}
 
 ObjTree::ObjTree(Obj *o, ObjTree *p) {
 	self = o;

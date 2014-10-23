@@ -33,7 +33,7 @@ void *lava::lex_all(lava::Lexer *l) {
 	} else if (isSpace(l->get())) {
 		l->dump();
 	} else {
-		err << "unknown symbol '" << l->get() << "' '" << l->emit()->c_str() << "'" << "\n";
+		err << "unknown symbol '" << l->get() << "' in '" << l->emit()->c_str() << "'" << "\n";
 	}
 
 	return (void *) lex_all;
